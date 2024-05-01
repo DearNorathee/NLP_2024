@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+
+
 """
 Created on Fri Nov 17 06:42:11 2023
 
@@ -14,6 +15,17 @@ from playsound import playsound
 # I'll export to here in the future.
 from lingtrain_aligner_func import sentence_alignment, sen_alignment_df
 
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\02 DataFrame')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\06 General Python')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\09 NLP_lib')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\10 OS')
+
+import lib02_dataframe as ds
+import video_tools as vt
+import python_wizard01 as pw
+import os_01 as ost
+
+
 # NEXT: 
 # test: read_movie_script2!!!
 
@@ -25,7 +37,7 @@ alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
 def read_sentences_from_excel(file_path, sheet_name, portuguese_col, english_col, nrows=None):
     """
     Reads Portuguese and English sentences from an Excel file.
-
+    
     :param file_path: Path to the Excel file.
     :param sheet_name: Name of the sheet containing the sentences.
     :param portuguese_col: Column letter for Portuguese sentences.
@@ -33,7 +45,7 @@ def read_sentences_from_excel(file_path, sheet_name, portuguese_col, english_col
     :return: Tuple of two lists containing Portuguese and English sentences.
     """
 
-    df = pd_read_excel(file_path,sheet_name=sheet_name,nrows=nrows,usecols=[portuguese_col,english_col])
+    df = ds.pd_read_excel(file_path,sheet_name=sheet_name,nrows=nrows,usecols=[portuguese_col,english_col])
 
     portuguese_sentences = df.iloc[:,0].tolist()
     english_sentences = df.iloc[:,1].tolist()
@@ -41,112 +53,7 @@ def read_sentences_from_excel(file_path, sheet_name, portuguese_col, english_col
 
     return portuguese_sentences, english_sentences
 
-def pd_regex_index(df,regex, column):
-    # from C:/Users/Heng2020/OneDrive/Python NLP/NLP 07_Sentence Alignment
-    # middle tested by read_movie_script
     
-    # used by: pd_split_into_dict_df
-    
-    """
-    
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        DESCRIPTION.
-    regex : str
-        use raw string to specify the regex.
-    column : str, int
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-
-    """
-    import pandas as pd
-    import re
-    
-    if isinstance(column, int):
-        select_column = df.iloc[:,column]
-    elif isinstance(column, str):
-        select_column = df[[column]]
-    else:
-        return "column can only be str or int"
-    
-    def regex_identifier(value):
-        return bool(re.match(regex, str(value)))
-    
-    boolean_df = select_column.apply(regex_identifier)
-    
-    
-    ans_index = boolean_df[boolean_df].index.tolist()
-    
-    if len(ans_index) == 1:
-        ans_index = ans_index[0]
-    
-    return ans_index
-
-def pd_split_into_dict_df(df,regex = None, regex_column = None, index_list = None):
-    # from C:/Users/Heng2020/OneDrive/Python NLP/NLP 07_Sentence Alignment
-    # middle tested by read_movie_script
-    # if index_list is supplied then ignore regex, regex_column
-    
-    # dependency: pd_split_into_dict_df, pd_regex_index
-    
-    if index_list is None:
-        index_list_used = pd_regex_index(df,regex,regex_column)
-    else:
-        index_list_used = [x for x in index_list]
-    
-    # add the final row
-    index_list_used.append(df.shape[0])
-    
-    df_dict = {}
-    start_index = 0
-    
-    temp_df : pd.DataFrame
-    
-    for end_index in index_list_used:
-        # Slice the dataframe for each episode
-        temp_df = df.iloc[start_index:end_index, :]
-
-        if not temp_df.empty:
-            # Get the episode identifier from the first row
-            episode_identifier = temp_df.iloc[0, 0]
-            temp_df = temp_df.reset_index(drop=True)
-            temp_df = temp_df.drop(0)
-            # Store the dataframe in the dictionary
-            df_dict[episode_identifier] = temp_df
-
-        start_index = end_index
-        
-    return df_dict
-
-def pd_by_column(df, columns):
-    # from C:/Users/Heng2020/OneDrive/Python NLP/NLP 07_Sentence Alignment
-    # middle tested by read_movie_script
-    # slice the dataFrame refer to by text or int
-    
-    if isinstance(columns, (str,int,float)):
-        column_list = [columns]
-    else:
-        column_list = [x for x in columns]
-    
-    col_index = []
-    
-    for col in column_list:
-        if isinstance(col, str):
-            col_index.append(df.columns.get_loc[col])
-        elif isinstance(col, (int,float)):
-            col_index.append(int(col))
-    
-    out_df = df.iloc[:,col_index]
-    return out_df
-    
-
-
 def read_movie_script(file_path, sheet_name = "Sheet1", portuguese_col = 0, english_col = 1):
     # middle tested 
     # dependency: pd_by_column, pd_split_into_dict_df, pd_regex_index
@@ -155,41 +62,22 @@ def read_movie_script(file_path, sheet_name = "Sheet1", portuguese_col = 0, engl
     
     # Load the dataset from the Excel file
 
-    data_ori = pd_read_excel(file_path, sheet_name=sheet_name, header=None)
+    data_ori = ds.pd_read_excel(file_path, sheet_name=sheet_name)
     # playsound(alarm_path)
     
-    data = pd_by_column(data_ori,[portuguese_col, english_col])
+    data = ds.pd_by_column(data_ori,[portuguese_col, english_col])
     
 
     # Function to check if a cell value matches the episode identifier pattern (e.g., S01E01)
     # r'[Ss]\d{2}[Ee]\d{2}' => S01E01
-    df_dict = pd_split_into_dict_df(data,r'[Ss]\d{2}[Ee]\d{2}',0)
+    df_dict = ds.pd_split_into_dict_df(data,r'[Ss]\d{2}[Ee]\d{2}',0)
     # df_dict = pd_split_into_dict_df(data,index_list=episode_start_indices)
     return df_dict
-
-def pd_read_excel(filepath,sheet_name = 0, header = 1):
-    # medium tested
-    import xlwings as xw
-    
-    if header is None:
-        header = False
-        
-    wb = xw.Book(filepath)
-    sheet = wb.sheets[sheet_name]
-    
-    # Find the used range
-    used_range = sheet.used_range
-    
-    # Convert the used range to a Pandas DataFrame
-    df = used_range.options(pd.DataFrame, header=header, index=False).value
-    
-    return df
-
 
 
 def read_movie_script2(file_path, sheet_name, portuguese_col, english_col):
     
-    df = pd_read_excel(file_path, sheet_name=sheet_name)
+    df = ds.pd_read_excel(file_path, sheet_name=sheet_name)
     # df = pd_by_column(df_ori, [portuguese_col,english_col])
     import pandas as pd
     """
@@ -248,10 +136,10 @@ filename = r"BigBang Sentence 01.xlsx"
 folderpath = Path(folder)
 file_path = folderpath / filename
 
-data_ori = pd_read_excel(file_path, header=None)
+data_ori = ds.pd_read_excel(file_path)
 
 sheet_name = 'merge'
-portuguese_col = 7  # Assuming Portuguese sentences are in column A
+portuguese_col = 7  # Assuming Portuguese sentences are in column F
 english_col = 2    # Assuming English sentences are in column B
 
 

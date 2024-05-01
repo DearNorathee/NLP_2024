@@ -20,6 +20,7 @@ alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.wav"
 # sub_output = os.path.join(srt_folder_path,sub_output_name)
 # what if I extract str directly from video .mvk?
 def srt_to_df(srt_path):
+    import pysrt
     if ".srt" in srt_path:
         # 1 file case
         subs = pysrt.open(srt_path)
@@ -68,7 +69,15 @@ def srt_to_Excel(srt_path,output_path,encoding='utf-8-sig',index=True,alarm_path
     #TOFIX the Excel files created still give me an error:
         #This file can't be previewed because of an error in the Microsoft Excel previewer
     #But files are created just fine.
+    #  *** it's resolved by itself
     
+    # ToAdd feature01: export multiple srt's file to 1 Excel files many sheets
+    # ToAdd feature02: auto format the width of column A, B, C and highlight the title
+    
+    """
+    convert .srt file to Excel file
+    """
+
     # output should be total_path
     # srt_path could be folder
     

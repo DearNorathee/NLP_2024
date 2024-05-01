@@ -32,7 +32,10 @@ def output_time(t_in_sec,replay ="Time spend:"):
     else:
         print(f"{replay} {int(t_in_sec)} seconds")
 
-def sen_alignment_df(df, lang_from = None, lang_to = None):
+def sen_alignment_df(df, lang_from = None, lang_to = None,
+                       alarm = True,
+                       alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3",
+                     ):
     # medium tested
     if lang_from is None: lang_from = df.columns[0]
     if lang_to is None: lang_to = df.columns[1]
@@ -40,12 +43,17 @@ def sen_alignment_df(df, lang_from = None, lang_to = None):
     text_list_from = df.iloc[:, 0].tolist()
     text_list_to = df.iloc[:, 1].tolist()
     # assume that text from is
-    result = sentence_alignment(text_list_from,text_list_to,lang_from,lang_to)
+    result = sentence_alignment(text_list_from,text_list_to,lang_from,lang_to,alarm=alarm,alarm_path=alarm_path)
     
     return result
     
 
-def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en"):
+def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en",
+                       alarm = True,
+                       alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3",
+                       
+                       ):
+    # v02 => add alarm parameter
     # text_from, text_to are expected to be text or list
     # medium tested, seem to work pretty well now
     
@@ -57,7 +65,7 @@ def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en"):
     import numpy as np
     from time import time
     
-    alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
+    folder = Path.cwd()
     
     db_name = "book.db"
     
@@ -72,7 +80,7 @@ def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en"):
         
     ts01 = time()
     if not isinstance(text_from, list):
-        text1_prepared = preprocessor.mark_paragraphs(text1)
+        text1_prepared = preprocessor.mark_paragraphs(text_from)
         splitted_from = splitter.split_by_sentences_wrapper(text1_prepared, lang_from)
     else:
         splitted_from = [str(x) for x in text_from if x is not np.nan ]
@@ -80,7 +88,7 @@ def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en"):
     
     if not isinstance(text_to, list):
         
-        text2_prepared = preprocessor.mark_paragraphs(text2)
+        text2_prepared = preprocessor.mark_paragraphs(text_to)
         splitted_to = splitter.split_by_sentences_wrapper(text2_prepared, lang_to)
     else:
         splitted_to = [str(x) for x in text_to if x is not np.nan ]
@@ -154,9 +162,10 @@ def sentence_alignment(text_from,text_to, lang_from = "pt", lang_to = "en"):
     
     ts02 = time()
     total_time = ts02-ts01
-    output_time(total_time)
+    pw.print_time(total_time)
     
-    playsound(alarm_path)
+    if alarm:
+        playsound(alarm_path)
     
     return paragraph_result
 

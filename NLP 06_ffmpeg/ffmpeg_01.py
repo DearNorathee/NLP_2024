@@ -952,7 +952,7 @@ def main():
     # test_extract_1_audio()
 
     # test_create_subtitle()
-    raise 
+     
 
     folder = Path(r"E:\Videos\The Big Bang Theory\The Big Bang Theory French Season 06")
 

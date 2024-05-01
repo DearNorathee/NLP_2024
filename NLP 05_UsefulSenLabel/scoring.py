@@ -24,8 +24,16 @@ from nltk.corpus import stopwords
 from pathlib import Path
 
 import sys
-sys.path.append(r"C:\Users\Heng2020\OneDrive\Python MyLib")
-import lib02_dataframe as f2
+
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\02 DataFrame')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\06 General Python')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\09 NLP_lib')
+sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\10 OS')
+
+import lib02_dataframe as ds
+import video_tools as vt
+import python_wizard01 as pw
+import os_01 as ost
 
 def nlp_predict(data,model,tfidf_vectorizer,col_input = 'portuguese_lemma', inplace = True):
     import pandas as pd
@@ -102,7 +110,7 @@ def nlp_score(
         print_index = True,
         inplace=True,
         close_after_scored = False,
-        plot_confusion = True,
+        plot_confusion = False,
         y_name = 'usefulness'
         ):
     """
@@ -142,7 +150,7 @@ def nlp_score(
     from pathlib import Path
     import sys
     sys.path.append(r"C:\Users\Heng2020\OneDrive\Python MyLib")
-    import lib02_dataframe as f2
+    import lib02_dataframe as ds
     # Open the workbook
     
     if isinstance(wb_path, (str,Path)):
@@ -154,7 +162,7 @@ def nlp_score(
 
     # Read data from the input sheet
     input_sheet = wb.sheets[input_sheet_name]
-    df = f2.pd_read_excel(df_path,input_sheet_name,header = 1)
+    df = ds.pd_read_excel(df_path,input_sheet_name,header = 1)
 
     # Apply the model to the specified column
     prediction = nlp_predict(df,model,vectorizer, col_input= col_input,inplace=False)
@@ -188,19 +196,23 @@ def nlp_score(
         wb.close()
 
 
-####################################
+#################################### change below 
 
-input_score_folder = Path(r'C:/Users/Heng2020/OneDrive/Python NLP/NLP 05_UsefulSenLabel')
-score_file_name = 'test_data_2Label.xlsm'
-input_sheet_name = "test_new_EP"
+
+
+input_score_folder = Path(r'C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\Portuguese\_LearnLanguages 04 BigBang PT\_BigBang PT')
+score_file_name = 'BigBang S01_aligned_scored.xlsb'
+input_sheet_name = "aligned_fixed"
 y_name = 'usefulness'
-col_input= 'portuguese'
+col_input= 'sentence_PT'
 
 
 
 df_path = input_score_folder / score_file_name
 
-saved_model_folder = Path(r'C:/Users/Heng2020/OneDrive/Python NLP/NLP 05_UsefulSenLabel/saved_models')
+####################### Run this chuck when change the input
+
+saved_model_folder = Path(r'C:/Users/Heng2020/OneDrive/D_Code/Python/Python NLP/NLP 01/NLP 05_UsefulSenLabel/saved_models')
 
 lr_model_name = "Linear_Regression_balanced.joblib"
 nb_model_name = "Naive Bayes_balanced"
@@ -232,8 +244,8 @@ vectorizer = joblib.load(vectorizer_path)
 
 # lr_model.predict_proba()
 
-if any(str(df_path).endswith('.' + ext) for ext in ["xlsm","xlsx"]):
-    df = f2.pd_read_excel(df_path,input_sheet_name,header = 1)
+if any(str(df_path).endswith('.' + ext) for ext in ["xlsm","xlsx","xlsb"]):
+    df = ds.pd_read_excel(df_path,input_sheet_name,header = 1)
 elif ".csv" in df_path:
     df = pd.read_csv(df_path)
 
@@ -246,6 +258,6 @@ elif ".csv" in df_path:
 chosen_model = lr_model
 prediction = nlp_predict(df,chosen_model,vectorizer, col_input= col_input,inplace=False)
 
-nlp_score(chosen_model,vectorizer,wb_path=df_path,input_sheet_name=input_sheet_name,inplace=False)
+nlp_score(chosen_model,vectorizer,wb_path=df_path,input_sheet_name=input_sheet_name,inplace=False, col_input = col_input)
 
 
