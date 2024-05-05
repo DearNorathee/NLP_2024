@@ -12,7 +12,7 @@ Created on Wed Apr 10 11:48:59 2024
 import pyttsx3
 import sys
 
-from typing import Literal,Union
+from typing import Literal,Union,List
 
 import dataframe_short as ds
 import pandas as pd
@@ -25,7 +25,7 @@ excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\_LearnLan
 sheet_name = "python_test"
 
 # vocab_df = ds.pd_read_excel(excel_path,sheet_name=sheet_name)
-
+#%%
 def lang_voice_name():
     """
     return the list of avaliable tts in your local machine
@@ -252,7 +252,7 @@ def create_audio_folder(excel_path,sheet_name):
     import excel_tool as xt
     import excel_tool.worksheet as ws
     vocab_df = ds.pd_read_excel(excel_path,sheet_name = sheet_name)
-    vocab_dict_df = ds.pd_split_into_dict_df(vocab_df01,add_prefix_index = True)
+    vocab_dict_df = ds.pd_split_into_dict_df(vocab_df,add_prefix_index = True)
     
     first_df = vocab_dict_df['01_Basics 1']
 
@@ -388,8 +388,44 @@ def rename_col_by_index(df, index, new_name, inplace=True):
     if not inplace:
         return df
 
-################################## Testing #######################
+# Sub
+def create_folders(folder: Union[str, Path], 
+                   name_list: List[str], 
+                   replace: bool = True) -> None:
+    import os
+    import shutil
+    """
+    Create directories in the specified folder based on names provided in name_list.
+
+    Parameters:
+    folder (Union[str, Path]): The path where the directories will be created.
+    name_list (List[str]): A list of directory names to create.
+
+    Returns:
+    None
+    """
     
+    # Ensure the folder path is a Path object
+    folder = Path(folder)
+    
+    # Iterate through the list of names and create each folder
+    for name in name_list:
+        dir_path = folder / name  # Construct the full path for the new directory
+        if not dir_path.exists():  # Check if the directory already exists
+            os.makedirs(dir_path)  # Create the directory if it does not exist
+            # print(f"Created directory: {dir_path}")
+        else:
+            if replace:
+                shutil.rmtree(dir_path)
+                os.makedirs(dir_path) 
+                print(f"Directory already exists and replaced: {dir_path}")
+            else:
+                print(f"Directory already exists: {dir_path}")
+                
+#%%
+################################## Testing #######################
+
+
 def test_create_audio():
     # still doesn't work in VSCode(didn't create audio as files),
     
@@ -475,10 +511,11 @@ def test_create_audio_folder():
     import dataframe_short as ds
     from tqdm import tqdm
     from playsound import playsound
+    from pathlib import Path
     
     excel_path = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\NLP_2024\NLP 11_Local_TTS\Duolingo French 02.xlsm"
     sheet_name = "formated"
-    out_folder01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\01 OutputData\test_create_audio_folder"
+    out_folder01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\01 OutputData\test_create_audio_folder\test_01"
     
     vocab_df01 = ds.pd_read_excel(excel_path,sheet_name = sheet_name)
     vocab_df02 = vocab_df01.iloc[:,:3]
@@ -491,25 +528,37 @@ def test_create_audio_folder():
     # use 0-index to refer to OrderDictt
     curr_df = list(vocab_dict_df01.items())[0][1]
     
-    for key,value in vocab_dict_df01.items():
+    chapter_list = list(vocab_dict_df01.keys())
+    create_folders(out_folder01, chapter_list)
+    
+    for key,value in tqdm(vocab_dict_df01.items()):
+        chapter = key
+        out_chapter_folder = Path(out_folder01) / chapter
+        # out_chapter_folder_str just for debugging
+        out_chapter_folder_str = str(out_chapter_folder)
         curr_df = value.copy()
         rename_col_by_index(curr_df,0,"French")
         rename_col_by_index(curr_df,1,"English")
-        # first_df.rename(columns={first_df.columns[0]: 'French'}, inplace=True)
-        # first_df.rename(columns={first_df.columns[1]: 'English'}, inplace=True)
-        n_digit = len(str(curr_df.shape[0]))
-        curr_df['formatted_index'] = (curr_df.index + 1).astype(str).str.zfill(n_digit)
-        curr_df['filename_dirty'] =  curr_df['French'] + '_' + curr_df['English']
-        curr_df['filename'] = curr_df.apply(
-            lambda row: pst.clean_filename(row['filename_dirty']),
-            axis = 1)
         
-        audio_from_df(curr_df, 
-                      audio_col = "French",
-                      output_folder = out_folder01,
-                      filename_col = 'filename' ,
-                      
-                      )
+        try:
+            # first_df.rename(columns={first_df.columns[0]: 'French'}, inplace=True)
+            # first_df.rename(columns={first_df.columns[1]: 'English'}, inplace=True)
+            n_digit = len(str(curr_df.shape[0]))
+            curr_df['formatted_index'] = (curr_df.index + 1).astype(str).str.zfill(n_digit)
+            curr_df['filename_dirty'] =  curr_df['French'] + '_' + curr_df['English']
+            curr_df['filename'] = curr_df.apply(
+                lambda row: pst.clean_filename(row['filename_dirty']),
+                axis = 1)
+            
+            audio_from_df(curr_df, 
+                          audio_col = "French",
+                          output_folder = out_chapter_folder,
+                          filename_col = 'filename' ,
+                          
+                          )
+        except ValueError:
+            print(f"Error at chapter: {chapter}")
+             
     print("test_create_audio_folder Pass !!!")
 
 
@@ -525,6 +574,14 @@ def test_pd_split_into_dict_df():
     df = pd.DataFrame(data)
     result_dict = pd_split_into_dict_df(df)
     print("test_pd_split_into_dict_df Pass!!!")
+
+import os
+from typing import Union, List
+from pathlib import Path
+
+
+
+
 
 
 test_pd_split_into_dict_df()
