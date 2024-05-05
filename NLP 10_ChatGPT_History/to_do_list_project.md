@@ -7,6 +7,14 @@ You can contribute in many ways:
 
 ## To do Next
 
+### Topic
+
+1. seperate assistent vs user
+  1. replace \n with the actual space
+2. Find whether it's GPT3 or 4
+3. Bring the channel to the first row
+4. set index to start at 1
+
 ## New Functions
 
 ## <name of the function>

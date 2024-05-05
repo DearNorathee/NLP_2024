@@ -17,12 +17,14 @@ from typing import Literal,Union
 import dataframe_short as ds
 import pandas as pd
 from pathlib import Path
+import py_string_tool as pst
+pst.format_index_num(4,534)
 
 excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\_LearnLanguages 02 Main\Duolingo\Duolingo French 02.xlsm"
 
 sheet_name = "python_test"
 
-vocab_df = ds.pd_read_excel(excel_path,sheet_name=sheet_name)
+# vocab_df = ds.pd_read_excel(excel_path,sheet_name=sheet_name)
 
 def lang_voice_name():
     """
@@ -166,7 +168,10 @@ def detect_language(input_text: Union[str,list[str]],
         return out_list
     elif isinstance(input_text, pd.Series):
         # not tested this part yet
-        unique_text = pd.Series(input_text.unique())
+        unique_text = pd.Series(input_text.unique()).dropna(how="all")
+        unique_text = unique_text.loc[unique_text != False]
+        unique_text = unique_text.astype(str)
+        data_types_check = unique_text.apply(lambda x: type(x).__name__)
         full_text = unique_text.str.cat(sep=' ')
         detect_lang = detect_language(full_text,return_as)
         return detect_lang
@@ -208,7 +213,9 @@ def audio_from_df(df: pd.DataFrame,
         output_folder = output_folder
         ) ,
         axis = 1)
-    
+
+def create_audio_folder():
+    pass
     
 ################################## Testing #######################
     
@@ -289,11 +296,84 @@ def duolingo_pilot():
     
     vocab_df02 = ds.pd_read_excel(excel_path,sheet_name="Animal")
     audio_from_df(vocab_df02,'French',out_folder02,filename_col="filename")
+
+def test_create_audio_folder():
+    import py_string_tool as pst
+    import dataframe_short as ds
+    excel_path = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\NLP_2024\NLP 11_Local_TTS\Duolingo French 02.xlsm"
+    sheet_name = "formated"
+    out_folder01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\01 OutputData\test_create_audio_folder"
+    
+    vocab_df01 = ds.pd_read_excel(excel_path,sheet_name = sheet_name)
+    vocab_df01 = vocab_df01.iloc[:,:3]
+    vocab_df01 = vocab_df01.iloc[:,1:3]
+    vocab_dict_df01 = ds.pd_split_into_dict_df(vocab_df01,add_prefix_index = True)
+    test02 = detect_language(vocab_df01.iloc[:,0])
+    test = detect_language(vocab_df01.iloc[:,1])
+    print("test_create_audio_folder Pass !!!")
+
+
+def pd_split_into_dict_df(df,add_prefix_index = False):
+    # Initialize an empty dictionary to store DataFrames
+    # requires: format_index_num
+    # imported from C:/Users/Heng2020/OneDrive/D_Code/Python/Python NLP/NLP 02/NLP_2024/NLP 11_Local_TTS
+    from collections import OrderedDict
+    df_dict = OrderedDict()
+
+    # Find the indices where the first column has a value and the rest are None
+    index_list_used = df.index[df.iloc[:, 1:].isnull().all(axis=1) & df.iloc[:, 0].notnull()].tolist()
+
+    # Use the values of the first column as keys and the slices between the found indices as dictionary values
+    n_dict = len(index_list_used)
+    i = 1
+    for start, end in zip(index_list_used, index_list_used[1:] + [None]):  # Adding None to handle till the end of the DataFrame
+        format_num = format_index_num(i, n_dict)
+        if add_prefix_index:
+            key = format_num + "_" + df.iloc[start, 0]  # The key is the value in the first column
+        else:
+            key = df.iloc[start, 0]
+        # Slice the DataFrame from the current index to the next one in the list
+        each_df = df.iloc[start+1:end].reset_index(drop=True)
+        each_df = each_df.dropna(how='all')
+        
+        df_dict[key] = each_df
+        i += 1
+        
+
+    return df_dict
+
+def test_pd_split_into_dict_df():
+    # Example DataFrame
+    data = {
+        'Column1': [None, 'Key1', None, None, 'Key2', None],
+        'Column2': [None, None, 1, 2, None, 3],
+        'Column3': [None, None, 'A', 'B', None, 'C']
+    }
+    
+    df = pd.DataFrame(data)
+    result_dict = pd_split_into_dict_df(df)
+    print("test_pd_split_into_dict_df Pass!!!")
+
+def format_index_num(to_format_num, total_num):
+    # imported from C:/Users/Heng2020/OneDrive/D_Code/Python/Python NLP/NLP 02/NLP_2024/NLP 11_Local_TTS
+    # tested via pd_split_into_dict_df
+    # adding leading 0 to the number
+    # Determine the number of digits in the largest number
+    total_digits = len(str(total_num))
+    
+    # Format the number with leading zeros
+    formatted_num = f"{to_format_num:0{total_digits}d}"
+    
+    return formatted_num
+
+test_pd_split_into_dict_df()
     
 
+test_create_audio_folder()
 # test_create_audio()
 # test_audio_from_df()
 duolingo_pilot()
+
 
 
 

@@ -6,12 +6,15 @@ helps, and credit will always be given.
 You can contribute in many ways:
 
 ## To do Next
+### `create_audio_folder` & `os_create_folders`
 
 ## New Functions
 
-## <name of the function>
+### create_audio_folder
+expansion of `audio_from_df` that will allow to create multiple folders with audio in it
 
-
+### os_create_folders(source,name_list)
+create a folder from the name_list
 
 ## Write Documentation
 
