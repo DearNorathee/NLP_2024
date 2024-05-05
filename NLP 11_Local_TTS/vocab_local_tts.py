@@ -18,7 +18,7 @@ import dataframe_short as ds
 import pandas as pd
 from pathlib import Path
 import py_string_tool as pst
-pst.format_index_num(4,534)
+
 
 excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\_LearnLanguages 02 Main\Duolingo\Duolingo French 02.xlsm"
 
@@ -180,24 +180,27 @@ def audio_from_df(df: pd.DataFrame,
                   audio_col:str,
                   output_folder:Union[str,Path] = "", 
                   filename_col:str = None,
-                  
+                  language:str = "auto"
                   ):
     
     if filename_col is None:
         filename_col_in = audio_col
     else:
         filename_col_in = filename_col
-        
-    language = detect_language(df[audio_col])
+    
+    if language in ["auto"]:
+        language_in = detect_language(df[audio_col])
+    else:
+        language_in = language
     # for testing avalibility of the tts(keyboard in your pc)
     n_rows = df.shape[0]
     
     digit_rows = len(str(n_rows))
     
     
-    engine = engine_by_lang(language)
+    engine = engine_by_lang(language_in)
     if engine is False:
-        raise Exception(f"Doesn't have '{language}' in the keyboard system. Please download this language in your keyboard. ")
+        raise Exception(f"Doesn't have '{language_in}' in the keyboard system. Please download this language in your keyboard. ")
     
     df_copy = df.copy()
     
@@ -208,14 +211,19 @@ def audio_from_df(df: pd.DataFrame,
     df_copy.apply(lambda row: create_audio(
         text = row[audio_col],
         filename = row['chosen_filename'],
-        language = language,
+        language = language_in,
         playsound = False,
         output_folder = output_folder
         ) ,
         axis = 1)
 
-def create_audio_folder():
-    pass
+def create_audio_folder(excel_path,sheet_name):
+    import excel_tool as xt
+    import excel_tool.worksheet as ws
+    vocab_df = ds.pd_read_excel(excel_path,sheet_name = sheet_name)
+    vocab_dict_df = ds.pd_split_into_dict_df(vocab_df01,add_prefix_index = True)
+    
+    first_df = vocab_dict_df['01_Basics 1']
     
 ################################## Testing #######################
     
@@ -298,18 +306,42 @@ def duolingo_pilot():
     audio_from_df(vocab_df02,'French',out_folder02,filename_col="filename")
 
 def test_create_audio_folder():
+    # specify column manually for now
+    # will change this to proper function later
     import py_string_tool as pst
     import dataframe_short as ds
+    
     excel_path = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\NLP_2024\NLP 11_Local_TTS\Duolingo French 02.xlsm"
     sheet_name = "formated"
     out_folder01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\01 OutputData\test_create_audio_folder"
     
     vocab_df01 = ds.pd_read_excel(excel_path,sheet_name = sheet_name)
-    vocab_df01 = vocab_df01.iloc[:,:3]
-    vocab_df01 = vocab_df01.iloc[:,1:3]
-    vocab_dict_df01 = ds.pd_split_into_dict_df(vocab_df01,add_prefix_index = True)
+    vocab_df02 = vocab_df01.iloc[:,:3]
+    vocab_df02 = vocab_df01.iloc[:,1:3]
+    vocab_dict_df01 = ds.pd_split_into_dict_df(vocab_df02,add_prefix_index = True)
     test02 = detect_language(vocab_df01.iloc[:,0])
     test = detect_language(vocab_df01.iloc[:,1])
+    
+    chosen_index = 0
+    # use 0-index to refer to OrderDictt
+    curr_df = list(vocab_dict_df01.items())[0][1]
+    rename_col_by_index(curr_df,0,"French")
+    rename_col_by_index(curr_df,1,"English")
+    # first_df.rename(columns={first_df.columns[0]: 'French'}, inplace=True)
+    # first_df.rename(columns={first_df.columns[1]: 'English'}, inplace=True)
+    n_digit = len(str(curr_df.shape[0]))
+    curr_df['formatted_index'] = (curr_df.index + 1).astype(str).str.zfill(n_digit)
+    curr_df['filename_dirty'] = curr_df['formatted_index'] + '_' + curr_df['French'] + '_' + curr_df['English']
+    curr_df['filename'] = curr_df.apply(
+        lambda row: pst.clean_filename(row['filename_dirty']),
+        axis = 1)
+    audio_from_df()
+    audio_from_df(curr_df, 
+                  audio_col = "French",
+                  output_folder = out_folder01,
+                  filename_col = 'filename' ,
+                  
+                  )
     print("test_create_audio_folder Pass !!!")
 
 
@@ -365,6 +397,95 @@ def format_index_num(to_format_num, total_num):
     formatted_num = f"{to_format_num:0{total_digits}d}"
     
     return formatted_num
+
+# pd_read_excel doesn't seem to work properly so I will modify to make it work here
+# then more testing need to be done before immigrate this to main lib
+def pd_read_excel(filepath, sheet_name=0, header_row=1, start_row=None, end_row=None):
+    import pandas as pd
+    import xlwings as xw
+    import numpy as np
+    # Hard for both Cluade3 & GPT4
+    # medium tested
+    # took about 1.5 hr(include testing)
+    """
+    
+    Read an Excel file into a Pandas DataFrame.
+
+    Args:
+        filepath (str): Path to the Excel file.
+        sheet_name (int or str, optional): Name or index of the sheet to read. Default is 0.
+        header_row (int or None, optional): Row number to use as the column names. If None, no header row is used. Default is 1.
+        start_row (int or None, optional): Row number to start reading data. If None, start from the beginning. Default is None.
+        end_row (int or None, optional): Row number to stop reading data. If None, read until the end. Default is None.
+
+    Returns:
+        Tuple containing:
+            - pandas.DataFrame: The data read from the Excel file.
+            - pandas.Series: The header row as a Series.
+    """
+    # header_row is False or None
+    if header_row in [False,None] :
+        header = False
+    else:
+        header = 1
+
+    wb = xw.Book(filepath)
+    sheet = wb.sheets[sheet_name]
+
+    used_range = sheet.used_range
+
+    # Convert the used range to a Pandas DataFrame
+    df_read_ori = used_range.options(pd.DataFrame, header=header, index=False).value
+
+    # Get the header row as a Series
+    header_row_df = df_read_ori.iloc[[header_row - 2]]
+
+    # Slice the DataFrame based on start_row and end_row
+    if start_row is None:
+        start_row_in = 0
+    else:
+        start_row_in = start_row -2 # Adjust for 0-based indexing and header row
+
+    if end_row is None:
+        df_info = df_read_ori.iloc[start_row_in:, :]
+    else:
+        end_row_in = end_row - 1  # Adjust for 0-based indexing
+        df_info = df_read_ori.iloc[start_row_in:end_row_in, :]
+
+    # Combine the header row and data into a single DataFrame
+    out_df = pd.concat([header_row_df, df_info], ignore_index=True)
+    out_df.columns = out_df.iloc[0]
+    out_df = out_df[1:]
+    out_df.reset_index(drop=True, inplace=True)
+
+    return out_df
+
+def rename_col_by_index(df, index, new_name, inplace=True):
+    """
+    Rename a column in a DataFrame based on its index that can handle repeated name
+
+    Parameters:
+    df (pd.DataFrame): The DataFrame whose column you want to rename.
+    index (int): The index of the column to rename.
+    new_name (str): The new name for the column.
+    inplace (bool): If True, modifies the DataFrame in place (default is True).
+
+    Returns:
+    pd.DataFrame or None: The DataFrame with the renamed column if inplace is False, otherwise None.
+    """
+    # Ensure the index is within the valid range
+    if not 0 <= index < len(df.columns):
+        raise IndexError("Column index out of range.")
+    
+    # Copy df if not inplace
+    if not inplace:
+        df = df.copy()
+    
+    # Set new column name
+    df.columns = df.columns[:index].tolist() + [new_name] + df.columns[index+1:].tolist()
+    
+    if not inplace:
+        return df
 
 test_pd_split_into_dict_df()
     
