@@ -1,9 +1,10 @@
 # History
 
 ## 0.1.1
-### Added
-- Multiple linear regression now available in new
-`regression.multiple_regression` module.
+### Fixed
+- test_create_audio_folder
+    `C'est vs. Il est - Directions` the error is coming from the excel file itself
+    `C'est vs. Il est` has no translation
 
 
 <!-- example -->

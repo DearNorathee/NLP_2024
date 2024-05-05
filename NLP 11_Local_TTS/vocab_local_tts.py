@@ -492,7 +492,7 @@ def test_audio_from_df():
 
 def duolingo_pilot():
     
-    excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\_LearnLanguages 02 Main\Duolingo\Duolingo French 02.xlsm"
+    excel_path = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 02\NLP_2024\NLP 11_Local_TTS\Duolingo French 02.xlsm"
     
     out_folder01 = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\Food"
     
@@ -507,6 +507,7 @@ def duolingo_pilot():
 def test_create_audio_folder():
     # specify column manually for now
     # will change this to proper function later
+    # based on pd. 2.1.3
     import py_string_tool as pst
     import dataframe_short as ds
     from tqdm import tqdm
@@ -524,6 +525,10 @@ def test_create_audio_folder():
     test02 = detect_language(vocab_df01.iloc[:,0])
     test = detect_language(vocab_df01.iloc[:,1])
     
+    chapter_limit = 10
+    chapter_limit = "all"
+
+    chapter_limit_in = chapter_limit if isinstance(chapter_limit,int) else len(vocab_dict_df01.items())
     chosen_index = 0
     # use 0-index to refer to OrderDictt
     curr_df = list(vocab_dict_df01.items())[0][1]
@@ -531,7 +536,11 @@ def test_create_audio_folder():
     chapter_list = list(vocab_dict_df01.keys())
     create_folders(out_folder01, chapter_list)
     
+    progress_bar = tqdm(total=chapter_limit_in)
+    i = 0
     for key,value in tqdm(vocab_dict_df01.items()):
+        if i > chapter_limit_in:
+            break
         chapter = key
         out_chapter_folder = Path(out_folder01) / chapter
         # out_chapter_folder_str just for debugging
@@ -545,6 +554,7 @@ def test_create_audio_folder():
             # first_df.rename(columns={first_df.columns[1]: 'English'}, inplace=True)
             n_digit = len(str(curr_df.shape[0]))
             curr_df['formatted_index'] = (curr_df.index + 1).astype(str).str.zfill(n_digit)
+            curr_df['English'] = curr_df['English'].astype(str)
             curr_df['filename_dirty'] =  curr_df['French'] + '_' + curr_df['English']
             curr_df['filename'] = curr_df.apply(
                 lambda row: pst.clean_filename(row['filename_dirty']),
@@ -558,8 +568,11 @@ def test_create_audio_folder():
                           )
         except ValueError:
             print(f"Error at chapter: {chapter}")
+        i += 1
+        progress_bar.update(1)
              
     print("test_create_audio_folder Pass !!!")
+    print("Don't forget to rename your folder is generating is successfull !!!")
 
 
 
