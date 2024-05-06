@@ -110,9 +110,10 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
                             prefix_name = None,
                             out_audio_ext = "wav",
                             alarm_done_path:Union[Literal[False],str] = False,
-                            
+                            verbose = 1,
                             ) -> None:
     
+    # took about 1 hr(including testing)
     # Add feature: input as video_folder_path and subtitle_folder_path, then 
     # it would automatically know which subttile to use with which video(using SxxExx)
     
@@ -132,7 +133,7 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
     # but only tested with no dots out_audio_ext
     
     out_audio_ext_dot = out_audio_ext if out_audio_ext[0] == "." else ("." + out_audio_ext)
-    out_audio_ext_no_dot = out_audio_ext if out_audio_ext[0] == "." else ("." + out_audio_ext)
+    out_audio_ext_no_dot = out_audio_ext[1:] if out_audio_ext[0] == "." else ( out_audio_ext)
     
     subs = vt.srt_to_df(subtitle_path)
 
@@ -142,8 +143,10 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
     video_audio = AudioSegment.from_file(video_path)
     t02 = time.time()
     t01_02 = t02-t01
-    print("Load video time: ", end = " ")
-    print_time(t01_02)
+
+    if verbose in [1]:
+        print("Load video time: ", end = " ")
+        print_time(t01_02)
     
     if alarm_done_path:
         playsound(alarm_path)
