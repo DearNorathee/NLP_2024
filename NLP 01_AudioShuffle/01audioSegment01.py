@@ -20,32 +20,6 @@ prefix_name = "The Ark S01E01"
 # prefix_name = "BigBang_S04E01"
 alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
 
-def srt_to_df(srt_path):
-    subs = pysrt.open(srt_path)
-    # Initialize empty lists for storing data
-    sentences = []
-    start_times = []
-    end_times = []
-
-    # Extract data from each subtitle sentence
-    for sub in subs:
-        sentences.append(sub.text)
-        start_times.append(sub.start.to_time())
-        end_times.append(sub.end.to_time())
-
-    # Create a DataFrame
-    df = pd.DataFrame({
-        'sentence': sentences,
-        'start': start_times,
-        'end': end_times
-    })
-    return df
-
-# def srt_to_csv(srt_path,output_path):
-#     # output should be total_path
-#     df_sub = srt_to_df(srt_path)
-#     # encoding='utf-8-sig' for Portuguese
-#     df_sub.to_csv(output_path, encoding='utf-8-sig')
 def to_ms(time_obj):
     time_obj_ms = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000 + time_obj.microsecond // 1000
     return time_obj_ms
@@ -104,7 +78,7 @@ def print_time(duration):
         print(f"{minutes_str} minutes", end="\n")
 
 # Sub
-def _split_1audio_by_subtitle(video_path: Union[str,Path],
+def split_1audio_by_subtitle(video_path: Union[str,Path],
                             subtitle_path,
                             output_folder,
                             prefix_name = None,
@@ -146,7 +120,7 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
 
     if verbose in [1]:
         print("Load video time: ", end = " ")
-        print_time(t01_02)
+        pw.print_time(t01_02)
     
     if alarm_done_path:
         playsound(alarm_path)
@@ -185,9 +159,9 @@ def test__split_1audio_by_subtitle():
     alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
     video_path =    Path( r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv")
     srt_path =      Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E01 PT.srt")
-    folder_path =   Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E01 PT")
+    folder_path =   Path( r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\split_audio_by_subtitle\test_01_Ark_S01E01")
     prefix_name =   "The Ark S01E01"
-    _split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path,alarm_done_path = alarm_done_path)
+    split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path,alarm_done_path = alarm_done_path)
 
     
 test__split_1audio_by_subtitle()
