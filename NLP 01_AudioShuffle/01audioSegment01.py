@@ -172,7 +172,7 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
         
         num_str = St_NumFormat0(i+1,n+1)
         # Save the audio segment to a file
-        audio_name = f'{prefix_name}_{num_str}{out_audio_ext_dot}'
+        audio_name = f'{prefix_name_in}_{num_str}{out_audio_ext_dot}'
         audio_output = os.path.join(output_folder,audio_name)
         sentence_audio.export(audio_output, format=out_audio_ext_no_dot)
     t05 = time.time()
@@ -182,57 +182,12 @@ def _split_1audio_by_subtitle(video_path: Union[str,Path],
         playsound(alarm_path)
 
 def test__split_1audio_by_subtitle():
+    alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
     video_path =    Path( r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv")
     srt_path =      Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E01 PT.srt")
     folder_path =   Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E01 PT")
     prefix_name =   "The Ark S01E01"
-    _split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path)
+    _split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path,alarm_done_path = alarm_done_path)
 
     
 test__split_1audio_by_subtitle()
-####################
-
-subs = srt_to_df(srt_path)
-
-
-# TODO: write a function input is video/video path & subs/sub path
-t01 = time.time()
-video_audio = AudioSegment.from_file(video_path)
-t02 = time.time()
-t01_02 = t02-t01
-print("Load video time: ", end = " ")
-print_time(t01_02)
-
-playsound(alarm_path)
-# ---------------------------- run til 1 -------------------------------
-########################## start run 2 ################################
-t03 = time.time()
-video_length = audio_duration(video_audio)
-# Iterate over subtitle sentences
-n = subs.shape[0]
-t04 = time.time()
-for i in range(n):
-    start_time = subs.loc[i,'start']
-    end_time = subs.loc[i,'end']
-    
-    if start_time > video_length:
-        break
-
-    start_time_ms = to_ms(start_time)
-    end_time_ms = to_ms(end_time)
-
-    # Extract audio segment based on timestamps
-    sentence_audio = video_audio[start_time_ms:end_time_ms]
-    
-    num_str = St_NumFormat0(i+1,n+1)
-    # Save the audio segment to a file
-    audio_name = f'{prefix_name}_{num_str}.wav'
-    audio_output = os.path.join(folder_path,audio_name)
-    sentence_audio.export(audio_output, format='wav')
-t05 = time.time()
-
-t04_05 = t05-t04
-playsound(alarm_path)
-print("Split Audio time: ", end = " ")
-print_time(t04_05)
-print(f"Total number of sentences:{num_str}")
