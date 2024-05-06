@@ -20,7 +20,7 @@ sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\06 Gen
 sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\09 NLP_lib')
 sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\10 OS')
 
-import lib02_dataframe as ds
+import dataframe_short as ds
 import video_tools as vt
 import python_wizard01 as pw
 import os_01 as ost

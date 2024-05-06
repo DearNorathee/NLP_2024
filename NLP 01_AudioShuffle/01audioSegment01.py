@@ -105,7 +105,7 @@ def print_time(duration):
 
 subs = srt_to_df(srt_path)
 
-# TODO: define folder and loop through folder find many srt's and convert to csv at once
+
 # TODO: write a function input is video/video path & subs/sub path
 t01 = time.time()
 video_audio = AudioSegment.from_file(video_path)
