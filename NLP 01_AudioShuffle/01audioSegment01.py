@@ -104,12 +104,20 @@ def print_time(duration):
         print(f"{minutes_str} minutes", end="\n")
 
 # Sub
-def split_audio_by_subtitle(video_path: Union[str,Path],
+def _split_1audio_by_subtitle(video_path: Union[str,Path],
                             subtitle_path,
                             output_folder,
                             prefix_name = None,
                             out_audio_ext = "wav",
-                            alarm_done_path:Union[Literal[False],str] = False) -> None:
+                            alarm_done_path:Union[Literal[False],str] = False,
+                            
+                            ) -> None:
+    
+    # Add feature: input as video_folder_path and subtitle_folder_path, then 
+    # it would automatically know which subttile to use with which video(using SxxExx)
+    
+    # split_audio_by_subtitle
+
     import video_toolkit as vt
     import python_wizard as pw
     from playsound import playsound
@@ -170,15 +178,15 @@ def split_audio_by_subtitle(video_path: Union[str,Path],
     if alarm_done_path:
         playsound(alarm_path)
 
-def test_split_audio_by_subtitle():
-    video_path =    Path( r"NLP 01/InputData/Westworld S04E01 Portuguese.mkv")
+def test__split_1audio_by_subtitle():
+    video_path =    Path( r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv")
     srt_path =      Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E01 PT.srt")
     folder_path =   Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E01 PT")
     prefix_name =   "The Ark S01E01"
-    split_audio_by_subtitle(video_path,srt_path,output_folder = folder_path)
+    _split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path)
 
     
-
+test__split_1audio_by_subtitle()
 ####################
 
 subs = srt_to_df(srt_path)
