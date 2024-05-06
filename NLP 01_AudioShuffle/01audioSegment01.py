@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import time
 from playsound import playsound
 from typing import Literal, Union
+from pathlib import Path
 # Parse the SRT subtitle file
 
 video_path = r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv"
@@ -102,18 +103,30 @@ def print_time(duration):
         print(f"{hours} hour", end=" ")
         print(f"{minutes_str} minutes", end="\n")
 
-
-def split_audio_by_subtitle(video_path,subtitle_path,out_audio_ext = "wav",
-                            
-                            alarm_done_path = False):
+# Sub
+def split_audio_by_subtitle(video_path: Union[str,Path],
+                            subtitle_path,
+                            output_folder,
+                            prefix_name = None,
+                            out_audio_ext = "wav",
+                            alarm_done_path:Union[Literal[False],str] = False) -> None:
+    import video_toolkit as vt
+    import python_wizard as pw
+    from playsound import playsound
     
+    from pathlib import Path
+    if prefix_name is None:
+        prefix_name_in = Path(video_path).stem
+    else:
+        prefix_name_in = str(prefix_name)
+        
     # with dot and no dots supported
     # but only tested with no dots out_audio_ext
     
     out_audio_ext_dot = out_audio_ext if out_audio_ext[0] == "." else ("." + out_audio_ext)
     out_audio_ext_no_dot = out_audio_ext if out_audio_ext[0] == "." else ("." + out_audio_ext)
     
-    subs = srt_to_df(subtitle_path)
+    subs = vt.srt_to_df(subtitle_path)
 
     
     # TODO: write a function input is video/video path & subs/sub path
@@ -123,8 +136,9 @@ def split_audio_by_subtitle(video_path,subtitle_path,out_audio_ext = "wav",
     t01_02 = t02-t01
     print("Load video time: ", end = " ")
     print_time(t01_02)
-
-    playsound(alarm_path)
+    
+    if alarm_done_path:
+        playsound(alarm_path)
     # ---------------------------- run til 1 -------------------------------
     ########################## start run 2 ################################
     t03 = time.time()
@@ -148,18 +162,22 @@ def split_audio_by_subtitle(video_path,subtitle_path,out_audio_ext = "wav",
         num_str = St_NumFormat0(i+1,n+1)
         # Save the audio segment to a file
         audio_name = f'{prefix_name}_{num_str}{out_audio_ext_dot}'
-        audio_output = os.path.join(folder_path,audio_name)
+        audio_output = os.path.join(output_folder,audio_name)
         sentence_audio.export(audio_output, format=out_audio_ext_no_dot)
     t05 = time.time()
 
     t04_05 = t05-t04
-    playsound(alarm_path)
+    if alarm_done_path:
+        playsound(alarm_path)
 
 def test_split_audio_by_subtitle():
-    video_path = r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv"
-    srt_path = r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\The Ark S01E01 PT.srt"
-    folder_path = r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles"
-    prefix_name = "The Ark S01E01"
+    video_path =    Path( r"NLP 01/InputData/Westworld S04E01 Portuguese.mkv")
+    srt_path =      Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E01 PT.srt")
+    folder_path =   Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E01 PT")
+    prefix_name =   "The Ark S01E01"
+    split_audio_by_subtitle(video_path,srt_path,output_folder = folder_path)
+
+    
 
 ####################
 
