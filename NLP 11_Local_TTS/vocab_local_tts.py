@@ -4,10 +4,14 @@ Created on Wed Apr 10 11:48:59 2024
 
 @author: Heng2020
 """
+
+
 # import excel_tool as xt
 # import excel_tool.range as rg
 
-# NEXT: write audio_from_df from create_audio
+# NEXT: set up French vocab process
+# add alarm to test_create_audio_folder
+# turn test_create_audio_folder into function create_audio_folder
 
 import pyttsx3
 import sys
@@ -497,7 +501,7 @@ def duolingo_pilot():
     out_folder01 = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\Food"
     
     out_folder02 = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\Animal"
-    
+    # French column seems to be missing when read using ds.pd_read_excel
     vocab_df01 = ds.pd_read_excel(excel_path,sheet_name="Food")
     audio_from_df(vocab_df01,'French',out_folder01,filename_col="filename")
     

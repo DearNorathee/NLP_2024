@@ -1,10 +1,12 @@
 # History
 
 ## 0.1.1
+
 ### Fixed
-- test_create_audio_folder
+- test_create_audio_folder(May 5, 2024)
     `C'est vs. Il est - Directions` the error is coming from the excel file itself
     `C'est vs. Il est` has no translation
+    this function works ok now
 
 
 <!-- example -->

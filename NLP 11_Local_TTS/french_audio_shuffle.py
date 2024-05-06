@@ -13,7 +13,7 @@ Created on Sat Jun 10 10:34:23 2023
 """
 #%%
 folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\Food"
-folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\Animal"
+folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\04_Food"
 
 #%%
 
@@ -31,7 +31,7 @@ from playsound import playsound
 from pydub import AudioSegment
 from pydub.playback import play
 
-import os_tool as ost
+import os_toolkit as ost
 # Example usage
 
 alarm_path = "H:\D_Music\Sound Effect positive-logo-opener.mp3"
@@ -57,9 +57,20 @@ def play_audio_slower(audio_path, speed_factor):
 file_path = ost.get_filename(folder_path,[".mp3",".wav"])
 file_path.insert(0,None)
 
+# what if the audio extension is .wav?
+
+target_lang = [None]
+eng_translation = [None]
+for i in range(1,len(file_path)):
+    filename = file_path[i]
+    _, vocab, translation = filename.split("_")
+    translation = translation.replace(".mp3","").replace(".wav","")
+    target_lang.append(vocab)
+    eng_translation.append(translation)
+
 #%%
-start_inx = 11
-end_inx = 15
+start_inx = 1
+end_inx = 5
 
 
 #%%
@@ -74,6 +85,8 @@ easy = []
 random_inx_list =list(range(start_inx,end_inx+1))
 
 random_inx_list = [x for x in random_inx_list if x not in skip_inx]
+
+
 #%%
 print(f"Allow index is from 0 to {len(random_inx_list)-1}")
 
@@ -95,4 +108,20 @@ play_audio_slower(audio_path, speed_factor)
 ###################### show answer
 ans = file_path[chosen_inx]
 print(ans)
+
+
+#%%
+###################### show translation
+chosen_inx = random_inx_list[2]
+# chosen_inx = 2
+print(f"Index: {chosen_inx}")
+translation = eng_translation[chosen_inx]
+print(translation)
+
+#%%
+###################### Answer in Audio
+audio_path = os.path.join(folder_path,file_path[chosen_inx])
+speed_factor = 1
+
+play_audio_slower(audio_path, speed_factor)
 
