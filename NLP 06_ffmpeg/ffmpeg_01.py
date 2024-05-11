@@ -18,11 +18,12 @@ import logging
 
 # NEXT: extract the Ark subtitle
 # The matrix subtitle(muti langauge in 1 video)
-sys.path.append(r'C:\Users\Heng2020\OneDrive\Python MyLib\Python MyLib 01\10 OS')
 
-import os_01 as ost
+
+import os_toolkit as ost
 
 from typing import Literal, Union
+
 def extract_audio2(
         video_folder:     Union[Path,str],
         output_folder:    Union[Path,str],

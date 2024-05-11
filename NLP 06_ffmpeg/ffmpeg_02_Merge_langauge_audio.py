@@ -37,9 +37,9 @@ audio_name = "The Big Bang Theory French S06E01.mp3"
 output_name = "BigBang All S06E01.mkv"
 
 
-video_folder = Path(r"C:\Users\Heng2020\OneDrive\Python NLP\NLP 06_ffmpeg")
+video_folder = Path(r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\NLP 06_ffmpeg")
 audio_folder = Path(r"E:\Videos\The Big Bang Theory French Season 06\Audio")
-output_folder = Path(r"C:\Users\Heng2020\OneDrive\Python NLP\NLP 06_ffmpeg")
+output_folder = Path(r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\extract_audio_1file\test_02")
 
 video_path = video_folder / video_name
 audio_path = audio_folder / audio_name
@@ -133,7 +133,7 @@ command06 = [
     str(output_name)
 ]
 
-cmd_line = ' '.join(command04)
+cmd_line = ' '.join(command)
 cmd_line
 
 result = subprocess.run(command, text=True, stderr=subprocess.PIPE)
@@ -141,7 +141,7 @@ result02 = subprocess.run(command02, text=True, stderr=subprocess.PIPE)
 result03 = subprocess.run(command03, text=True, stderr=subprocess.PIPE)
 result04 = subprocess.run(command04, text=True, stderr=subprocess.PIPE)
 
-select_result = result04
+select_result = result
 
 if select_result.returncode != 0:
     print("Error encountered:")
