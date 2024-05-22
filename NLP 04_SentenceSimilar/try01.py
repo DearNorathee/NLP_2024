@@ -73,8 +73,8 @@ def St_SplitSentence(text, delimiter, inplace=True):
             
     return text if not inplace else None
 
-# Function to remove elements that start with a specific character (in this case "♪")
 def remove_from_list(lst, char="♪"):
+    # Function to remove elements that start with a specific character (in this case "♪")
     # can generalize more to 
     # remove_from_list(lst,start_with = None,end_with = None,logic = "or")
     return [element for element in lst if not str(element).startswith(char)]
