@@ -155,7 +155,7 @@ def split_1audio_by_subtitle(video_path: Union[str,Path],
     if alarm_done_path:
         playsound(alarm_path)
 
-def test__split_1audio_by_subtitle():
+def test_split_1audio_by_subtitle():
     alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
     video_path =    Path( r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E01 PT.mkv")
     srt_path =      Path( r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E01 PT.srt")
