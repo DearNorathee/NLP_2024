@@ -4,6 +4,8 @@ Created on Sat Nov  4 07:30:24 2023
 
 @author: Heng2020
 """
+
+import modeling_tool as ml
 import torch
 
 num_gpus = torch.cuda.device_count()
@@ -15,6 +17,22 @@ if num_gpus > 0:
 else:
     print("No GPU available.")
 
+def check_gpu(verbose = 1):
+    import torch
+    num_gpus = torch.cuda.device_count()
+
+    if num_gpus > 0:
+        if verbose >= 1:
+            print(f"Number of GPUs available: {num_gpus}")
+        for i in range(num_gpus):
+            if verbose >= 1:
+                print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
+    else:
+        if verbose >= 1:
+            print("No GPU available.")
+    return num_gpus
+
+check_gpu()
 
 
 import tensorflow as tf

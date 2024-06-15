@@ -31,7 +31,7 @@ from playsound import playsound
 from pydub import AudioSegment
 from pydub.playback import play
 
-import os_tool as ost
+import os_toolkit as ost
 # Example usage
 
 alarm_path = "H:\D_Music\Sound Effect positive-logo-opener.mp3"
@@ -49,51 +49,6 @@ def play_audio_slower(audio_path, speed_factor):
     slow_audio = audio._spawn(audio.raw_data, overrides={"frame_rate": int(audio.frame_rate * speed_factor)})
     play(slow_audio)
 
-
-def get_filename(folder_path,extension = "all"):
-    # also include "folder"  case
-# tested small
-    if extension == "all":
-        out_list = [ file for file in os.listdir(folder_path) ]
-
-    elif isinstance(extension,str):
-        extension_temp = [extension]
-
-        out_list = []
-
-        for file in os.listdir(folder_path):
-            if "." in file:
-                file_extension = file.split('.')[-1]
-                for each_extention in extension_temp:
-                    # support when it's ".csv" or only "csv"
-                    if file_extension in each_extention:
-                        out_list.append(file)
-            elif extension == "folder":
-                out_list.append(file)
-
-
-    elif isinstance(extension,list):
-        out_list = []
-        for file in os.listdir(folder_path):
-
-            if "." in file:
-                file_extension = file.split('.')[-1]
-                for each_extention in extension:
-                    # support when it's ".csv" or only "csv"
-                    if file_extension in each_extention:
-                        out_list.append(file)
-
-            elif "folder" in extension:
-                out_list.append(file)
-
-        return out_list
-
-    else:
-        print("Don't support this dataype for extension: please input only string or list")
-        return False
-
-    return out_list
-    
 
 #------------------------------ reload model ------------------------------
 

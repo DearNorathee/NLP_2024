@@ -13,7 +13,8 @@ from typing import Union,List,Tuple, Callable
 import subprocess
 import sys
 import logging
-
+import pandas as pd
+import video_toolkit as vt
 # import string_01 as st
 
 # NEXT: extract the Ark subtitle
@@ -843,7 +844,16 @@ def test_get_metadata():
     folder = Path(r"H:\D_Video\The Ark Season 01 Portuguese")
     video_name = "The Ark S01E02 PT.mkv"
     video_path = folder / video_name
-    test = get_all_metadata(video_path)
+    actual01 = vt.get_all_metadata(video_path)
+    # got this expected01_dict from ChatGPT
+    expected01_dict = {
+        'filetype': ['video', 'audio', 'audio', 'subtitle'],
+        'file_extension': ['h264', 'ac3', 'eac3', 'ass'],
+        'language': ['N/A', 'por', 'eng', 'por'],
+        'duration_in_min': [42.2010666667, 42.2010666667, 42.2010666667, 42.2010666667]
+    }
+    expected01 = pd.DataFrame(expected01_dict)
+    pd.testing.assert_frame_equal(actual01,expected01)
     logging.debug('Done From test_get_subtitle_stream_index')
 
 def test_get_subtitle_index():
@@ -918,7 +928,12 @@ def test_create_subtitle():
     print(duration)
 
 
-
+def test_funcs():
+    test_get_metadata()
+    test_get_subtitle_index()
+    test_extract_1_audio()
+    test_crop_video()
+    test_create_subtitle()
 
 # command = [
 #     "ffmpeg",
@@ -947,6 +962,7 @@ def test_create_subtitle():
 # ]
 
 def main():
+    test_funcs()
     logging.basicConfig(level=logging.DEBUG)
     test_get_subtitle_index()
 

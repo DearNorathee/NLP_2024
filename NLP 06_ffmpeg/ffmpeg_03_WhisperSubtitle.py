@@ -95,7 +95,7 @@ def write_subtitle_from_transcribe(transcribe,output_name,output_folder = None):
         endTime = str(0)+str(timedelta(seconds=int(segment['end'])))+',000'
         text = segment['text']
         segmentId = segment['id']+1
-        segment = f"{segmentId}\n{startTime} --> {endTime}\n{text[1:] if text[0] is ' ' else text}\n\n"
+        segment = f"{segmentId}\n{startTime} --> {endTime}\n{text[1:] if text[0] == ' ' else text}\n\n"
         
         srtFilename = os.path.join("SrtFiles", f"VIDEO_FILENAME.srt")
         with open(srtFilename, 'a', encoding='utf-8') as srtFile:
