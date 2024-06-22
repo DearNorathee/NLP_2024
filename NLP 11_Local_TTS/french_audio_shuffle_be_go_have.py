@@ -11,6 +11,7 @@ Created on Sat Jun 10 10:34:23 2023
 
 @author: Heng2020
 """
+
 import modeling_tool as ml
 
 #%%
@@ -19,6 +20,8 @@ import modeling_tool as ml
 folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\04_Food"
 
 folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\13_Verbs Present 1"
+
+folder_path = r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\05_Animals"
 folder_path = r"H:\D_Music\_Learn Languages\French\Forvo\01 Basic Present"
 #%%
 import video_toolkit as vt
@@ -38,9 +41,10 @@ from pydub.playback import play
 
 import os_toolkit as ost
 # Example usage
-vt.is_ffmpeg_installed()
-alarm_path = "H:\D_Music\Sound Effect positive-logo-opener.mp3"
-playsound(alarm_path)
+
+alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
+vt.play_audio(alarm_path)
+# playsound(alarm_path)
 speed_factor = 0.5  # Play at 50% slower speed
 
 ################################ reload model(needs to be runed) ######################################
@@ -55,12 +59,6 @@ def play_audio_slower(audio_path, speed_factor):
     # slowed_audio = audio.speedup(playback_speed=1/speed_factor)
     slow_audio = audio._spawn(audio.raw_data, overrides={"frame_rate": int(audio.frame_rate * speed_factor)})
     play(slow_audio)
-
-def play_audio(file_path):
-    from pydub import AudioSegment
-    from pydub.playback import play
-    audio = AudioSegment.from_mp3(file_path)
-    play(audio)
 
 #------------------------------ reload model ------------------------------
 
@@ -88,6 +86,7 @@ start_inx = 1
 end_inx = 9
 audio = AudioSegment.from_file(r"H:\D_Music\_Learn Languages\French\Local TTS generated\Duolingo\04_Food\14_la soupe_soup.mp3")
 play(audio)
+vt.play_audio(alarm_path)
 
 #%%
 
@@ -124,15 +123,15 @@ random.shuffle(random_inx_list)
 
 #%%
 test_path = r"H:\D_Music\08_l'huile _oil (cooking or lubricant).mp3"
-playsound(test_path)
-play_audio(test_path)
+vt.play_audio(test_path)
+
 #--------------------------( Translation -> Audio: show answer)
-chosen_inx = random_inx_list[1]
+chosen_inx = random_inx_list[3]
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
 # playsound(audio_path)
 
-play_audio_slower(audio_path, speed_factor)
+vt.play_audio(audio_path)
 
 ###################### Translation -> Audio/Translation
 chosen_inx = random_inx_list[6]

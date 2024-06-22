@@ -27,7 +27,7 @@ from playsound import playsound
 import os
 import random
 import pandas as pd
-
+import video_toolkit as vt
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -106,7 +106,7 @@ else:
 print(f"Allow index is from 0 to {len(random_inx_list)-1}")
 
 #%% ############ run this when I want to reshuffle the same audio set
-mySeed = 18
+mySeed = 1
 random.seed(mySeed)
 random.shuffle(random_inx_list)
 
@@ -121,14 +121,14 @@ print(ans)
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
 
-play_audio_slower(audio_path, speed_factor)
+vt.play_audio(audio_path)
 
 ans = eng_translation[chosen_inx]
 print(ans)
 
 #%%
 ########################## Audio -> Translation ##################################
-chosen_inx = random_inx_list[10]
+chosen_inx = random_inx_list[4]
 # chosen_inx = 2
 print(f"Index: {chosen_inx}")
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
@@ -144,7 +144,7 @@ print(ans)
 
 #%%
 ###################### Translation -> Audio ##########################################
-chosen_inx = random_inx_list[9]
+chosen_inx = random_inx_list[0]
 # chosen_inx = 2
 print(f"Index: {chosen_inx}")
 translation = eng_translation[chosen_inx]
