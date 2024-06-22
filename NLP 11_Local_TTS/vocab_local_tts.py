@@ -29,6 +29,7 @@ excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\_LearnLan
 sheet_name = "python_test"
 
 # vocab_df = ds.pd_read_excel(excel_path,sheet_name=sheet_name)
+
 #%%
 def lang_voice_name():
     """
@@ -592,13 +593,30 @@ def test_pd_split_into_dict_df():
     result_dict = pd_split_into_dict_df(df)
     print("test_pd_split_into_dict_df Pass!!!")
 
-import os
-from typing import Union, List
-from pathlib import Path
 
+def create_basic_present():
+    output_folder = r"H:\D_Music\_Learn Languages\French\Forvo\01 Basic Present"
+    have_FR = ["j'ai","tu as", "il a", "elle a", "on a","nous avons" ,"vous avez", "ils ont", "elles ont" ]
+    
+    have_filename = ["I have_j'ai","You(sg) have_tu as", "He has_il a", "She has_elle a", "One has_on a","We have_nous avons", 
+                     "You(pl) have_vous avez", "They(m) have_ils ont", "They(f) have_elles ont" ]
+    
+    be_FR = ["chui","tu es", "il est", "elle est", "on est","nous sommes", "vous êtes", "ils sont", "elles sont" ]
+    
+    be_filename = ["I am_je suis","You(sg) are_tu es", "He is_il est", "She is_elle est", "One is_on est","We are_nous sommes", 
+                     "You(pl) are_vous êtes", "They(m) are_ils sont", "They(f) are_elles sont"  ]
+    
+    go_FR = ["je vais","tu vas", "il va", "elle va", "on va","nous allons", "vous allez", "ils vont", "elles vont" ]
+    
+    go_filename = ["I go_je vais","You(sg) go_tu vas", "He goes_il va", "She goes_elle va", "One goes_on va","We go_nous allons", 
+                     "You(pl) go_vous allez", "They(m) go_ils vont", "They(f) go_elles vont"  ]
+    
+    all_verbs_FR = have_FR + be_FR + go_FR
+    all_filename = have_filename + be_filename + go_filename
+    
+    create_audio(all_verbs_FR,language = "French",filename=all_filename,output_folder=output_folder)
 
-
-
+create_basic_present()
 
 
 test_pd_split_into_dict_df()
