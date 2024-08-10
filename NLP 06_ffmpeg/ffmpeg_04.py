@@ -6,6 +6,7 @@ Created on Sat May 11 10:07:29 2024
 """
 
 import video_toolkit as vt
+
 from typing import List, Tuple, Literal, Union
 from pathlib import Path
 import inspect_py as inp
