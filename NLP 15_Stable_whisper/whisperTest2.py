@@ -80,8 +80,11 @@ def transcribe_to_subtitle_1file(
         output_folder_in = output_folder
 
     output_path = Path(str(output_folder_in)) / output_name_in
-
-    result = model.transcribe(audio_path)
+    
+    if isinstance(model, (whisper.model.Whisper)):
+        result = model.transcribe(audio_path)
+    elif isinstance(model, (faster_whisper.WhisperModel)): 
+        result = model.transcribe_stable(audio_path)
     result.to_srt_vtt(str(output_path),word_level =False)
 
 # NEXT write transcribe_to_subtitle to loop through the audio files and create subtitles
@@ -112,7 +115,7 @@ def transcribe_to_subtitle(
         audio_full_paths = ost.get_full_filename(audio_path,extension = input_extension)
         audio_name_paths = ost.get_filename(audio_path,extension = input_extension)
         if progress_bar:
-            loop_obj = tqdm( enumerate(audio_full_paths))
+            loop_obj = tqdm( enumerate(audio_full_paths), total = len(audio_full_paths))
         else:
             loop_obj = enumerate(audio_full_paths)
 
@@ -208,7 +211,8 @@ def old_code():
     srt_path = r"h\BigBang_FR_S06E10.srt"
     sub_output = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.csv"
     vt.srt_to_csv(srt_path, sub_output)
-
-test_transcribe_to_subtitle_1file()
+    
+test_transcribe_to_subtitle()
+# test_transcribe_to_subtitle_1file()
 
 
