@@ -23,7 +23,8 @@ from playsound import playsound
 from pydub import AudioSegment
 from pydub.playback import play
 from typing import List, Literal, Dict, Union
-
+import faster_whisper
+from pathlib import Path
 # no_speech_threshold: default 0.6
 # increase it might help the audio to be categorize as slient
 
@@ -45,55 +46,75 @@ def play_audio_slower(audio_path, speed_factor):
     slow_audio = audio._spawn(audio.raw_data, overrides={"frame_rate": int(audio.frame_rate * speed_factor)})
     play(slow_audio)
 
-model = whisper.load_model('base')
-audio_path = r"C:\Users\Heng2020\OneDrive\Icon File Image\whisper_test_01.wav"
 
-WW_S04E01_008 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\Westworld S04E01\Westworld_S04E01_008.wav"
-WW_S04E01_010 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\Westworld S04E01\Westworld_S04E01_010.wav"
+def transcribe_to_subtitle_1file(
+        model:Union[whisper.model.Whisper, faster_whisper.WhisperModel]
+        ,audio_path: Union[str,Path]
+        ):
+    """
+    signature function that will extract the subtitle from the audio
+    """
+    pass
 
-path01 = r"H:\D_Music\2022 01 单依纯  永不失联的爱.mp3"
+def test_transcribe_to_subtitle_1file():
+    # as of Aug,10,2024 cuda was still not install correctly, so I'm going to use model from 
+    model = stable_whisper.load_model('base')
+    BigBangFR_S06E10 = r"C:\Users\Heng2020\Downloads\BigBang FR\Saison 6\Season 06 Audio\The Big Bang Theory_S06E10_FR.mp3"
 
-result = model.transcribe(audio_path)
-text = result['text']
+    result = model.transcribe(BigBangFR_S06E10)
+    result.to_srt_vtt('BigBang_FR_S06E10.srt',word_level =False)
 
-BigBang_S03E01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\InputData\BigBang PT S03E01.mkv"
+def old_code():
+    model = whisper.load_model('base')
+    audio_path = r"C:\Users\Heng2020\OneDrive\Icon File Image\whisper_test_01.wav"
 
-S04E01_008_text = model.transcribe(WW_S04E01_008)['text']
+    WW_S04E01_008 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\Westworld S04E01\Westworld_S04E01_008.wav"
+    WW_S04E01_010 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\Westworld S04E01\Westworld_S04E01_010.wav"
 
-S04E01_010_text = model.transcribe(WW_S04E01_010,fp16=False)['text']
-text01 = model.transcribe(path01,fp16=False)['text']
+    path01 = r"H:\D_Music\2022 01 单依纯  永不失联的爱.mp3"
 
-play_audio_slower(WW_S04E01_010,1)
+    result = model.transcribe(audio_path)
+    text = result['text']
 
-BigBangFR_S06E10 = r"C:\Users\Heng2020\Downloads\BigBang FR\Saison 6\Season 06 Audio\The Big Bang Theory_S06E10_FR.mp3"
+    BigBang_S03E01 = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\InputData\BigBang PT S03E01.mkv"
 
-model = stable_whisper.load_model('base')
-faster_model_large = stable_whisper.load_faster_whisper('large-v3')
-faster_model_base = stable_whisper.load_faster_whisper('base')
-# {'tiny', 'tiny.en', 'base', 'base.en', 'small', 'small.en', 'medium', 'medium.en', 'large-v1',
-# 'large-v2', 'large-v3', or 'large'}
+    S04E01_008_text = model.transcribe(WW_S04E01_008)['text']
 
-result = model.transcribe(BigBangFR_S06E10)
-result.to_srt_vtt('BigBang_FR_S06E10.srt',word_level =False)
+    S04E01_010_text = model.transcribe(WW_S04E01_010,fp16=False)['text']
+    text01 = model.transcribe(path01,fp16=False)['text']
 
-# I wouldn't use refine from preminary result
-# the .refine doesn't improve the timestamp that much
-# upgrading to stable_whisper 2.17.3 seems to help
-# and it took 13.51 min / 20 min of videos to refine
+    play_audio_slower(WW_S04E01_010,1)
 
-result_refine = model.refine(BigBangFR_S06E10,result)
-result_refine.to_srt_vtt('BigBang_FR_S06E10_refined.srt',word_level =False)
+    BigBangFR_S06E10 = r"C:\Users\Heng2020\Downloads\BigBang FR\Saison 6\Season 06 Audio\The Big Bang Theory_S06E10_FR.mp3"
 
-result_02 = model.transcribe(BigBang_S03E01)
-result_02.to_srt_vtt('BigBang_EN_S03E01.srt',word_level =False)
+    model = stable_whisper.load_model('base')
+    faster_model_large = stable_whisper.load_faster_whisper('large-v3')
+    faster_model_base = stable_whisper.load_faster_whisper('base')
+    # {'tiny', 'tiny.en', 'base', 'base.en', 'small', 'small.en', 'medium', 'medium.en', 'large-v1',
+    # 'large-v2', 'large-v3', or 'large'}
 
-result_02_fast_large = faster_model.transcribe_stable(BigBangFR_S06E10)
-result_02_fast_base = faster_model.transcribe_stable(BigBang_S03E01)
+    result = model.transcribe(BigBangFR_S06E10)
+    result.to_srt_vtt('BigBang_FR_S06E10.srt',word_level =False)
 
-result_02.to_srt_vtt('BigBang_EN_S03E01_no_wordlevel.srt',word_level =False)
-result_02.to_srt_vtt('BigBang_EN_S03E01_no_segment.srt',segment_level=False)
-result.to_srt_vtt('Westworld_S04E01_008.srt') 
+    # I wouldn't use refine from preminary result
+    # the .refine doesn't improve the timestamp that much
+    # upgrading to stable_whisper 2.17.3 seems to help
+    # and it took 13.51 min / 20 min of videos to refine
 
-srt_path = r"h\BigBang_FR_S06E10.srt"
-sub_output = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.csv"
-vt.srt_to_csv(srt_path, sub_output)
+    result_refine = model.refine(BigBangFR_S06E10,result)
+    result_refine.to_srt_vtt('BigBang_FR_S06E10_refined.srt',word_level =False)
+
+    result_02 = model.transcribe(BigBang_S03E01)
+    result_02.to_srt_vtt('BigBang_EN_S03E01.srt',word_level =False)
+
+    result_02_fast_large = faster_model.transcribe_stable(BigBangFR_S06E10)
+    result_02_fast_base = faster_model.transcribe_stable(BigBang_S03E01)
+
+    result_02.to_srt_vtt('BigBang_EN_S03E01_no_wordlevel.srt',word_level =False)
+    result_02.to_srt_vtt('BigBang_EN_S03E01_no_segment.srt',segment_level=False)
+    result.to_srt_vtt('Westworld_S04E01_008.srt') 
+
+    srt_path = r"h\BigBang_FR_S06E10.srt"
+    sub_output = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.csv"
+    vt.srt_to_csv(srt_path, sub_output)
+
