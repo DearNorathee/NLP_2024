@@ -22,6 +22,7 @@ import ffmpeg
 from playsound import playsound
 from pydub import AudioSegment
 from pydub.playback import play
+from typing import List, Literal, Dict, Union
 
 # no_speech_threshold: default 0.6
 # increase it might help the audio to be categorize as slient
@@ -93,6 +94,6 @@ result_02.to_srt_vtt('BigBang_EN_S03E01_no_wordlevel.srt',word_level =False)
 result_02.to_srt_vtt('BigBang_EN_S03E01_no_segment.srt',segment_level=False)
 result.to_srt_vtt('Westworld_S04E01_008.srt') 
 
-srt_path = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.srt"
+srt_path = r"h\BigBang_FR_S06E10.srt"
 sub_output = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.csv"
 vt.srt_to_csv(srt_path, sub_output)
