@@ -33,6 +33,7 @@ from pathlib import Path
 # no_speech_threshold: default 0.6
 # increase it might help the audio to be categorize as slient
 import os
+# make sure that fast_whisper will not throw weird error
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # vad_threshold: deault False
 # set to True could generate a more accurate timestamp
@@ -42,7 +43,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # model.refine('audio.mp3', result)
 
 # Timestamps can be further improved with refine(). This method iteratively mutes portions of the audio based on current timestamps then compute the probabilities of the tokens. Then by monitoring the fluctuation of the probabilities, it tries to find the most precise timestamps. "Most precise" in this case means the latest start and earliest end for the word such that it still meets the specified conditions.
-
+alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
 def play_audio_slower(audio_path, speed_factor):
     # still not working
     # TODO: Find way to play audio with slower speed without changing the file
@@ -82,8 +83,59 @@ def transcribe_to_subtitle_1file(
 
     result = model.transcribe(audio_path)
     result.to_srt_vtt(str(output_path),word_level =False)
-    
+
 # NEXT write transcribe_to_subtitle to loop through the audio files and create subtitles
+def transcribe_to_subtitle(
+    model:Union[whisper.model.Whisper, faster_whisper.WhisperModel]
+    ,audio_path: Union[str,Path]
+    ,output_name: Union[str,Path] = ""
+    ,output_folder: Union[str,Path] = ""
+    ,progress_bar:bool = True
+    ,verbose:int = 1
+    ,alarm_done:bool = True
+    ,alarm_error:bool = True
+    ,input_extension:Union[List[str],str] = [".mp3",".wav"]
+    ) -> None:
+    # list of files is not supported
+    """
+    audio_path could be folder_path, single_file, or list of files
+
+
+    """
+    import os_toolkit as ost
+    from tqdm import tqdm
+
+    alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
+
+
+    if ost.is_folder_path(audio_path):
+        audio_full_paths = ost.get_full_filename(audio_path,extension = input_extension)
+        audio_name_paths = ost.get_filename(audio_path,extension = input_extension)
+        if progress_bar:
+            loop_obj = tqdm( enumerate(audio_full_paths))
+        else:
+            loop_obj = enumerate(audio_full_paths)
+
+        for i, path in loop_obj:
+            transcribe_to_subtitle_1file(model,path,output_name = output_name,output_folder = output_folder)
+            if verbose >= 1:
+                print(f"{audio_name_paths[i]} done!!")
+            
+        if alarm_done:
+            try:
+                vt.play_audio(alarm_done_path)
+            except:
+                pass
+    elif isinstance(audio_path,list):
+        raise NotImplementedError(f"list of files is not supported")
+    elif isinstance(audio_path,(str,Path)):
+        transcribe_to_subtitle_1file(model,audio_path,output_name = output_name,output_folder = output_folder)
+        if alarm_done:
+            try:
+                vt.play_audio(alarm_done_path)
+            except:
+                pass
+    
 
 def test_transcribe_to_subtitle_1file():
     # as of Aug,10,2024 cuda was still not install correctly, so I'm going to use model from 
@@ -92,6 +144,15 @@ def test_transcribe_to_subtitle_1file():
     output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French Subtitle"
     transcribe_to_subtitle_1file(model,BigBangFR_S02E01,output_folder = output_folder)
 
+
+def test_transcribe_to_subtitle():
+    import os
+    # make sure that fast_whisper will not throw weird error
+    os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+    bigBang_FR_season2 = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French Subtitle"
+    faster_model_base = stable_whisper.load_faster_whisper('base')
+    transcribe_to_subtitle(faster_model_base,bigBang_FR_season2,output_folder = output_folder)
 
 
 def old_code():
