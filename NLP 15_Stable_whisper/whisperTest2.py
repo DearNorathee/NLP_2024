@@ -4,6 +4,11 @@ Created on Mon May  1 14:29:13 2023
 
 @author: Heng2020
 """
+
+# NEXT write transcribe_to_subtitle to loop through the audio files and create subtitles
+
+
+
 # I workssss finally
 # based on numba 0.58.0
 # whisper 1.1.10
@@ -27,7 +32,8 @@ import faster_whisper
 from pathlib import Path
 # no_speech_threshold: default 0.6
 # increase it might help the audio to be categorize as slient
-
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # vad_threshold: deault False
 # set to True could generate a more accurate timestamp
 
@@ -50,19 +56,43 @@ def play_audio_slower(audio_path, speed_factor):
 def transcribe_to_subtitle_1file(
         model:Union[whisper.model.Whisper, faster_whisper.WhisperModel]
         ,audio_path: Union[str,Path]
-        ):
+        ,output_name: Union[str,Path] = ""
+        ,output_folder: Union[str,Path] = ""
+        ) -> None:
+    # medium tested
+    # seems to work
+    
+    # TOADD_01: output subtitle format
+    
     """
     signature function that will extract the subtitle from the audio
     """
-    pass
+    # if output_name is "" then default it should use the same name as the audio
+    if output_name == "":
+        output_name_in = Path(str(audio_path)).stem
+    else:
+        output_name_in = output_name
+
+    if output_folder == "":
+        output_folder_in = Path(str(audio_path)).parent
+    else:
+        output_folder_in = output_folder
+
+    output_path = Path(str(output_folder_in)) / output_name_in
+
+    result = model.transcribe(audio_path)
+    result.to_srt_vtt(str(output_path),word_level =False)
+    
+# NEXT write transcribe_to_subtitle to loop through the audio files and create subtitles
 
 def test_transcribe_to_subtitle_1file():
     # as of Aug,10,2024 cuda was still not install correctly, so I'm going to use model from 
     model = stable_whisper.load_model('base')
-    BigBangFR_S06E10 = r"C:\Users\Heng2020\Downloads\BigBang FR\Saison 6\Season 06 Audio\The Big Bang Theory_S06E10_FR.mp3"
+    BigBangFR_S02E01 = r"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01.mkv"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French Subtitle"
+    transcribe_to_subtitle_1file(model,BigBangFR_S02E01,output_folder = output_folder)
 
-    result = model.transcribe(BigBangFR_S06E10)
-    result.to_srt_vtt('BigBang_FR_S06E10.srt',word_level =False)
+
 
 def old_code():
     model = whisper.load_model('base')
@@ -107,8 +137,8 @@ def old_code():
     result_02 = model.transcribe(BigBang_S03E01)
     result_02.to_srt_vtt('BigBang_EN_S03E01.srt',word_level =False)
 
-    result_02_fast_large = faster_model.transcribe_stable(BigBangFR_S06E10)
-    result_02_fast_base = faster_model.transcribe_stable(BigBang_S03E01)
+    result_02_fast_large = faster_model_base.transcribe_stable(BigBangFR_S06E10)
+    result_02_fast_base = faster_model_base.transcribe_stable(BigBang_S03E01)
 
     result_02.to_srt_vtt('BigBang_EN_S03E01_no_wordlevel.srt',word_level =False)
     result_02.to_srt_vtt('BigBang_EN_S03E01_no_segment.srt',segment_level=False)
@@ -117,4 +147,7 @@ def old_code():
     srt_path = r"h\BigBang_FR_S06E10.srt"
     sub_output = r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\BigBang_FR_S06E10.csv"
     vt.srt_to_csv(srt_path, sub_output)
+
+test_transcribe_to_subtitle_1file()
+
 
