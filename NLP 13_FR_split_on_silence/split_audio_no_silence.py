@@ -58,7 +58,7 @@ def export_audio(audio_segment:AudioSegment,
                  start_end_time_dict: Dict[int,Tuple[int,int]],
                  output_names:Dict[int,str],
                  output_folder:str = "",
-                 progressbar:bool = True,
+                 progress_bar:bool = True,
                  ) -> None:
     
     # medium tested
@@ -69,6 +69,19 @@ def export_audio(audio_segment:AudioSegment,
     export multiple audio_segments
     make sure that index in output_names is also in start_end_time_dict
     
+    example of start_end_time_dict
+        start_end_time_dict = {
+        6:  [14_633 , 15_933],
+        7:  [24_455 , 25_534],
+        8:  [25_700 , 27_550],
+        9:  [27_899 , 30_000],
+        10: [31_075 , 32_863],
+        11: [33_439 , 36_188],
+        12: [37_280 , 42_100],
+        14: [42_865 , 47_224],
+        
+        }
+
     TOADD: replace => it would check if file already exists, if so depending on it's True or False, it would replace the file
     """
     import py_string_tool as pst
@@ -77,7 +90,7 @@ def export_audio(audio_segment:AudioSegment,
         clean_output_names[inx] = pst.clean_filename(output_name)
     
     from tqdm import tqdm
-    if progressbar:
+    if progress_bar:
         loop_obj = tqdm(start_end_time_dict.items())
     else:
         loop_obj = start_end_time_dict.items()
@@ -99,6 +112,7 @@ def export_audio(audio_segment:AudioSegment,
     
     
 #%%
+        
 def test_export_audio():
     filepath = r"G:\My Drive\G_Videos\Learn French\Learn to speak French in 5 minutes - a dialogue for beginners!.mp3"
     audio = AudioSegment.from_file(filepath) 
