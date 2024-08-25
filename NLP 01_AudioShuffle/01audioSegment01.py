@@ -9,6 +9,7 @@ import time
 from playsound import playsound
 from typing import Literal, Union
 from pathlib import Path
+import shutil
 # Parse the SRT subtitle file
 
 def test_split_1audio_by_subtitle():
@@ -22,10 +23,14 @@ def test_split_1audio_by_subtitle():
 
 def split_BigBangFR_S02E01():
     import video_toolkit as vt
+    # the result is not great 
+    # I might need to develop a way to merge the sub(with correct time) and audio together
+    
     alarm_done_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
     video_path =    Path( r"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01.mkv")
     srt_path =      Path( r"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01_FR.srt")
     folder_path =   Path( r"H:\D_Music\_Learn Languages\French\BigBang FR\Season 02\S02E01")
+    # shutil.rmtree(folder_path)
     prefix_name =   "BigBang FR S01E01"
     vt.split_1audio_by_subtitle(video_path,srt_path,output_folder = folder_path,prefix_name=prefix_name)
     print()
