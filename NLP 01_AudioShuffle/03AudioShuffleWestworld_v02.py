@@ -24,8 +24,13 @@ import ffmpeg
 from playsound import playsound
 from pydub import AudioSegment
 from pydub.playback import play
-
+import os_toolkit as ost
 # Example usage
+import faster_whisper
+from faster_whisper import WhisperModel
+
+# get the name of available_models
+# faster_whisper.available_models()
 
 alarm_path = "H:\D_Music\Sound Effect positive-logo-opener.mp3"
 speed_factor = 0.5  # Play at 50% slower speed
@@ -44,60 +49,21 @@ def play_audio_slower(audio_path, speed_factor):
     play(slow_audio)
 
 
-def get_filename(folder_path,extension = "all"):
-    # also include "folder"  case
-# tested small
-    if extension == "all":
-        out_list = [ file for file in os.listdir(folder_path) ]
-
-    elif isinstance(extension,str):
-        extension_temp = [extension]
-
-        out_list = []
-
-        for file in os.listdir(folder_path):
-            if "." in file:
-                file_extension = file.split('.')[-1]
-                for each_extention in extension_temp:
-                    # support when it's ".csv" or only "csv"
-                    if file_extension in each_extention:
-                        out_list.append(file)
-            elif extension == "folder":
-                out_list.append(file)
-
-
-    elif isinstance(extension,list):
-        out_list = []
-        for file in os.listdir(folder_path):
-
-            if "." in file:
-                file_extension = file.split('.')[-1]
-                for each_extention in extension:
-                    # support when it's ".csv" or only "csv"
-                    if file_extension in each_extention:
-                        out_list.append(file)
-
-            elif "folder" in extension:
-                out_list.append(file)
-
-        return out_list
-
-    else:
-        print("Don't support this dataype for extension: please input only string or list")
-        return False
-
-    return out_list
-
 #%%
-model_base = whisper.load_model('base')
+# this line prevent error(not sure how it works)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+model_base = WhisperModel('base', device="cuda")
 playsound(alarm_path)
-model_large = whisper.load_model('large')
+model_large = WhisperModel('large-v3',device='cpu')
+playsound(alarm_path)
+
+model_distil_large = WhisperModel('distil-large-v3')
 playsound(alarm_path)
 #------------------------------ reload model ------------------------------
 
 
 #%%
-file_path = get_filename(folder_path,[".mp3",".wav"])
+file_path = ost.get_filename(folder_path,[".mp3",".wav"])
 file_path.insert(0,None)
 script = pd.read_excel(script_path)
 script = script.drop(script.columns[0],axis=1)
@@ -109,8 +75,11 @@ mySeed = 24
 #%%
 # 55 is too easy
 
-skip_inx = [4,9,16,17,29,30,52,53,55,68,72,79,84, 124, 152, 153, 154, 155, 156]
-easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165]
+skip_inx = [4,9,16,17,29,30,52,53,55,68,72,79,84, 124, 152, 153, 
+            154, 155, 156, 184,186, 190, 191, 193,194,195,196,198,201,202,203,204
+            
+            ]
+easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200]
 
 # (2,'2-Jul-23')
 # (6,'2-Jul-23')
@@ -149,7 +118,7 @@ random.shuffle(random_inx_list)
 #%%
 ########################## run below recurrently ##################################
 # chosen_inx = random_inx_list[3]
-chosen_inx = 177
+chosen_inx = 138
 print(f"Index: {chosen_inx}")
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
@@ -161,12 +130,20 @@ play_audio_slower(audio_path, speed_factor)
 ans = script.loc[chosen_inx-1,'sentence']
 print(ans)
 ################################
-text_pred = model_base.transcribe(audio_path,language="pt")['text']
+segments, _ = model_base.transcribe(audio_path,language="pt")
+text_pred = list(segments)[0][4]
 print(text_pred)
 
-text_pred = model_large.transcribe(audio_path,language="pt")['text']
-print(text_pred)
+segments, _ = model_large.transcribe(audio_path,language="pt")
+text_pred = list(segments)[0][4]
 playsound(alarm_path)
+print(text_pred)
+
+# model_distil_large doesn't work
+# segments, _ = model_distil_large.transcribe(audio_path,language="pt")
+# text_pred = list(segments)[0]
+# playsound(alarm_path)
+# print(text_pred)
 
 
 

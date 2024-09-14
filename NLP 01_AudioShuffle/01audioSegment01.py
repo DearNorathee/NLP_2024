@@ -10,6 +10,7 @@ from playsound import playsound
 from typing import Literal, Union
 from pathlib import Path
 import shutil
+import video_toolkit as vt
 # Parse the SRT subtitle file
 
 def test_split_1audio_by_subtitle():
@@ -36,5 +37,19 @@ def split_BigBangFR_S02E01():
     print()
 
 
-split_BigBangFR_S02E01()
+def extract_ori_sub_BigBangFR():
+    video_folder = fr"H:\D_Video\BigBang French\BigBang FR Season 02"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French Subtitle ori Extracted"
+    vt.extract_subtitle(video_folder = video_folder, output_folder = output_folder)
+
+def extract_ori_sub_BigBangFR_1_file():
+    video_path = fr"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01.mkv"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02\Season 02 Audio\French Subtitle ori Extracted"
+    vt.extract_sub_1_video(video_path, output_folder)
+
+
+extract_ori_sub_BigBangFR_1_file()
+extract_ori_sub_BigBangFR()
+
+# split_BigBangFR_S02E01()
 # test_split_1audio_by_subtitle()
