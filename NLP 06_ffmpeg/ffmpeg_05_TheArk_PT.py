@@ -42,9 +42,9 @@ def split_audio_the_Ark_s1():
         video_path = input_audio_path, 
         subtitle_path = input_sub_path, 
         output_folder = output_sub_folder,
-        include_sentence=False
+        include_sentence=True
         )
 
 # extract_the_Ark()
-whisper_extract_the_Ark_s1()
+# whisper_extract_the_Ark_s1()
 split_audio_the_Ark_s1()
