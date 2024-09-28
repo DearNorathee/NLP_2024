@@ -11,6 +11,9 @@ Created on Fri Dec 29 07:23:17 2023
 
 # I did it with GPT4 for 2 days(may be about 10 hrs)
 
+# spacy 3.7.2 needs 
+# to have pydantic 1.10.12
+# env: latest_python
 
 import nltk
 import spacy

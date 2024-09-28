@@ -14,6 +14,7 @@ import python_wizard as pw
 import stable_whisper
 import os
 
+
 def extract_the_Ark():
     import video_toolkit as vt
     folder_the_Ark = Path(r"H:\D_Video\The Ark Season 01 Portuguese")
@@ -34,6 +35,8 @@ def whisper_extract_the_Ark_s1():
     vt.audio_to_sub(faster_model_base, audio_path = input_audio_folder,output_folder=output_sub_folder)
 
 def split_audio_the_Ark_s1():
+    # use sub from video 
+    # split as mp3 is much slow than wav
     input_audio_path = Path(r"H:\D_Video\The Ark Season 01 Portuguese\Audio Extracted\Portuguese 1\The Ark S01E02 PT_PT.mp3")
     input_sub_path = "H:\D_Video\The Ark Season 01 Portuguese\Subtitles\srt\The Ark S01E02 PT.srt"
 
@@ -42,9 +45,38 @@ def split_audio_the_Ark_s1():
         video_path = input_audio_path, 
         subtitle_path = input_sub_path, 
         output_folder = output_sub_folder,
-        include_sentence=True
+        include_sentence=True,
+        out_audio_ext="mp3"
+        
         )
 
+def split_audio_the_Ark_s1_whisper_sub():
+    # whisper sub with modified sub seems to work better than original sub(timestamp)
+    
+    # use sub from video 
+    # split as mp3 is much slow than wav
+    input_audio_path = Path(r"H:\D_Video\The Ark Season 01 Portuguese\Audio Extracted\Portuguese 1\The Ark S01E02 PT_PT.mp3")
+    input_sub_path = "H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\The Ark S01E02 PT_PT.srt"
+
+    output_sub_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E02 PT_2"
+    
+    sub_df = vt.sub_to_df(input_sub_path)
+    modified_sub = vt.modify_sub_df_time(sub_df)
+    
+    vt.split_1audio_by_sub_df(
+        video_path = input_audio_path, 
+        subs_df = modified_sub, 
+        output_folder = output_sub_folder)
+
+def srt_to_excel_Ark_s1():
+
+    input_sub_folder = "H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT"
+    output_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\Excel Generated"
+    vt.srt_to_Excel(srt_path = input_sub_folder, output_path = output_folder)
+    
+srt_to_excel_Ark_s1()
+
+split_audio_the_Ark_s1_whisper_sub()
 # extract_the_Ark()
 # whisper_extract_the_Ark_s1()
 split_audio_the_Ark_s1()
