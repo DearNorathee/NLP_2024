@@ -5,11 +5,6 @@ Created on Fri Dec 29 07:23:17 2023
 @author: Heng2020
 """
 
-# Next 
-     #  change all dependency of functions
-     #  move nlp_word_freq_all, concat_vocab_df to my library
-     
-     
 ############## This interesting  project is pretty much useless
 # Next thing if I decided to continue at all is not incoperate more files but
 # include "filter" my KNOWN words
@@ -276,8 +271,8 @@ def pd_common_elements(series_1,series_2):
     common_elements = list(set(series_1).intersection(series_2))
     return common_elements
     
-path_S06E01 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\Excel Extracted\BigBang FR S06E01_FR.xlsx"
-path_S06E02 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\Excel Extracted\BigBang FR S06E02_FR.xlsx"
+path_S06E01 = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\Portuguese\_LearnLanguages 04 BigBang PT\_BigBang PT\S06\BigBang S06E01 PT.xlsx"
+path_S06E02 = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\Portuguese\_LearnLanguages 04 BigBang PT\_BigBang PT\S06\BigBang S06E02 PT.xlsx"
 
 path01 = r"C:/Users/Heng2020/OneDrive/D_Code/Python/Python NLP/NLP 01/NLP 08_VocabList/O Google CRIOU um ROBÔ CONSCIENTE.txt"
 
@@ -291,9 +286,7 @@ nlp_large = spacy.load("pt_core_news_lg")
 # nlp = spacy.load("pt_core_news_md")
 
 # French
-warnings.filterwarnings("ignore", category=UserWarning, module="spacy")
-nlp_large = spacy.load("fr_core_news_lg")
-# nlp_large = spacy.load("fr_dep_news_trf") # very large model
+# nlp_large = spacy.load("fr_dep_news_trf")
 
 
 
