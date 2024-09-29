@@ -61,6 +61,10 @@ def pd_is_same(df1,df2):
 
 def nlp_word_freq_all(data_path,model,plot = True):
     # middium tested
+    
+    # spacy 3.7.2 needs 
+    # to have pydantic 1.10.12
+    
     """
     signature_function
     
@@ -196,11 +200,8 @@ def concat_vocab_df(df1,df2, plot = True):
     """
     import pandas as pd
     import seaborn as sns
+    import python_wizard.pw_list as pwl
     
-    
-    def flatten(list_of_lists):
-        """Flatten a 2D list to 1D"""
-        return [item for sublist in list_of_lists for item in sublist]
 
 
     word_raw_freq1 = df1[['word','count_word']]
@@ -217,7 +218,7 @@ def concat_vocab_df(df1,df2, plot = True):
 
     df_combine = pd.concat([df1,df2],ignore_index=True)
     
-    grouped_sen = df_combine.groupby('word')['sentence'].agg(flatten).reset_index()
+    grouped_sen = df_combine.groupby('word')['sentence'].agg(pwl.flatten).reset_index()
 
     agg_word = df_combine.groupby(['word','type'],sort=False)[['count_word','n_doc_word']].sum().reset_index()
 
