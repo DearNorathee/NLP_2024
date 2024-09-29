@@ -32,34 +32,18 @@ import seaborn as sns
 import textstat
 import matplotlib.pyplot as plt
 import warnings
+import dataframe_short as ds
 # textstat.set_lang(lang)
 
-def flatten(list_of_lists):
-    """Flatten a 2D list to 1D"""
-    return [item for sublist in list_of_lists for item in sublist]
+# def flatten(list_of_lists):
+#     """Flatten a 2D list to 1D"""
+#     return [item for sublist in list_of_lists for item in sublist]
 
-def is_empty_string(s):
-    # Returns True if the string is empty or whitespace, False otherwise
-    return not s.strip()
 
-def not_empty_string(s):
-    # Returns False if the string is empty or whitespace, True otherwise
-    return s.strip()
-
-def pd_is_same(df1,df2):
-    
-    """ check if each row is the same or not regardless of their row index?
-    
-    """
-    sorted_df1 = df1.sort_values(by=df1.columns.tolist()).reset_index(drop=True)
-    sorted_df2 = df2.sort_values(by=df2.columns.tolist()).reset_index(drop=True)
-    
-    # Check if the sorted DataFrames are exactly the same
-    are_rows_identical = sorted_df1.equals(sorted_df2)
-    
-    return are_rows_identical
-
-def nlp_word_freq_all(data_path,model,plot = True):
+def nlp_word_freq_all(
+        data_path
+        ,model
+        ,plot:bool = True):
     # middium tested
     
     # spacy 3.7.2 needs 
@@ -79,6 +63,7 @@ def nlp_word_freq_all(data_path,model,plot = True):
     """
     import warnings
     import pandas as pd
+    import py_string_tool as pst
     # to slient to warning creating from sns ploting
     warnings.filterwarnings("ignore", category=FutureWarning)
     
@@ -101,7 +86,7 @@ def nlp_word_freq_all(data_path,model,plot = True):
             text_list2 = []
             
             for sentence in text_list:
-                if not_empty_string(sentence):
+                if pst.not_empty_string(sentence):
                     if not sentence.endswith("."):
                         sentence_with_dot = sentence.replace("\n", "") + "."
                     else:
@@ -258,24 +243,6 @@ def concat_vocab_df(df1,df2, plot = True):
     
     return out_df
 
-def pd_common_elements(series_1,series_2):
-    """
-    series_1 
-
-    Parameters
-    ----------
-    series_1 : pd.Series
-        should be something like df1['x1']
-    series_2 : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    common_elements : list
-
-    """
-    common_elements = list(set(series_1).intersection(series_2))
-    return common_elements
     
 path_S06E01 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\Excel Extracted\BigBang FR S06E01_FR.xlsx"
 path_S06E02 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\Excel Extracted\BigBang FR S06E02_FR.xlsx"
@@ -295,9 +262,9 @@ nlp_large = spacy.load("pt_core_news_lg")
 warnings.filterwarnings("ignore", category=UserWarning, module="spacy")
 nlp_large = spacy.load("fr_core_news_lg")
 # nlp_large = spacy.load("fr_dep_news_trf") # very large model
+spacy.Language
 
-
-
+isinstance(nlp_large, spacy.Language)
 ############ below tested
 df1 = nlp_word_freq_all(path_S06E01, nlp_large)
 df2 = nlp_word_freq_all(path_S06E02, nlp_large)
@@ -311,7 +278,7 @@ test1 = concat_vocab_df(df1,df2)
 
     
 
-# common_words = pd_common_elements(df1['word'],df2['word'])
+# common_words = ds.common_element(df1['word'],df2['word'])
 
 
 
