@@ -14,6 +14,14 @@ import python_wizard as pw
 import stable_whisper
 import os
 
+def extract_the_Ark_debug_01():
+    import video_toolkit as vt
+    folder_the_Ark = Path(r"H:\D_Video\The Ark Season 01 Portuguese")
+    video_path1 = r"H:\D_Video\The Ark Season 01 Portuguese\The Ark S01E10 PT.mkv"
+    output_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Audio Extracted\Debug"
+    output_name = "The Ark S01E10 PT.wav"
+    vt.extract_1_audio(video_path, output_folder, output_name)
+    print(f"From extract_the_Ark_debug_01")
 
 def extract_the_Ark():
     import video_toolkit as vt
@@ -56,7 +64,7 @@ def split_audio_the_Ark_s1_whisper_sub():
     # use sub from video 
     # split as mp3 is much slow than wav
     input_audio_path = Path(r"H:\D_Video\The Ark Season 01 Portuguese\Audio Extracted\Portuguese 1\The Ark S01E02 PT_PT.mp3")
-    input_sub_path = "H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\The Ark S01E02 PT_PT.srt"
+    input_sub_path = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\The Ark S01E02 PT_PT.srt"
 
     output_sub_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Subtitles\splited_audio\The Ark S01E02 PT_2"
     
@@ -73,7 +81,8 @@ def srt_to_excel_Ark_s1():
     input_sub_folder = "H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT"
     output_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\Excel Generated"
     vt.srt_to_Excel(srt_path = input_sub_folder, output_path = output_folder)
-    
+
+extract_the_Ark_debug_01()
 srt_to_excel_Ark_s1()
 
 split_audio_the_Ark_s1_whisper_sub()
