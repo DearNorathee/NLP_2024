@@ -32,7 +32,7 @@ from faster_whisper import WhisperModel
 # get the name of available_models
 # faster_whisper.available_models()
 
-alarm_path = "H:\D_Music\Sound Effect positive-logo-opener.mp3"
+alarm_path = r"H:\D_Music\Sound Effect positive-logo-opener.mp3"
 speed_factor = 0.5  # Play at 50% slower speed
 ################################ reload model(needs to be runed) ######################################
 # spyder can't have model_base &  model_large: I have to reload everytime
@@ -53,7 +53,7 @@ def play_audio_slower(audio_path, speed_factor):
 # this line prevent error(not sure how it works)
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 model_base = WhisperModel('base', device="cuda")
-playsound(alarm_path)
+# playsound(alarm_path)
 model_large = WhisperModel('large-v3',device='cpu')
 playsound(alarm_path)
 
@@ -79,7 +79,7 @@ skip_inx = [4,9,16,17,29,30,52,53,55,68,72,79,84, 124, 152, 153,
             154, 155, 156, 184,186, 190, 191, 193,194,195,196,198,201,202,203,204, 219
             
             ]
-easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200]
+easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200, 223, 227, 228]
 
 # (2,'2-Jul-23')
 # (6,'2-Jul-23')
@@ -118,7 +118,7 @@ random.shuffle(random_inx_list)
 #%%
 ########################## run below recurrently ##################################
 # chosen_inx = random_inx_list[3]
-chosen_inx = 207
+chosen_inx = 230
 print(f"Index: {chosen_inx}")
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
