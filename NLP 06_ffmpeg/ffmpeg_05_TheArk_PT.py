@@ -9,10 +9,13 @@ import video_toolkit as vt
 from typing import List, Tuple, Literal, Union
 from pathlib import Path
 import inspect_py as inp
+import modeling_tool as ml
 # Sub
 import python_wizard as pw
 import stable_whisper
 import os
+
+ml.check_gpu()
 
 def extract_the_Ark_debug_01():
     import video_toolkit as vt
@@ -40,7 +43,23 @@ def whisper_extract_the_Ark_s1():
     input_audio_folder = Path(r"H:\D_Video\The Ark Season 01 Portuguese\Audio Extracted\Portuguese 1")
 
     output_sub_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT"
-    vt.audio_to_sub(faster_model_base, audio_path = input_audio_folder,output_folder=output_sub_folder)
+    vt.audio_to_sub(faster_model_base, audio_paths = input_audio_folder,output_folder=output_sub_folder)
+
+def whisper_extract_the_Ark_s1_left():
+    # extract the left videos which is episode 10, 11,12
+    import video_toolkit as vt
+    os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+    faster_model_base = stable_whisper.load_faster_whisper('base')
+
+    input_audio_folder = [
+        # r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E10 PT_PT.mp3",
+        # r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E11 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E12 PT_PT_Final_PT.mp3",
+        
+        ]
+
+    output_sub_folder = r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT"
+    vt.audio_to_sub(faster_model_base, audio_paths = input_audio_folder,output_folder=output_sub_folder)
 
 def split_audio_the_Ark_s1():
     # use sub from video 
@@ -81,6 +100,22 @@ def srt_to_excel_Ark_s1():
     input_sub_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT"
     output_folder = r"H:\D_Video\The Ark Season 01 Portuguese\Whisper base Subtitle PT\Excel Generated"
     vt.srt_to_Excel(srt_path = input_sub_folder, output_path = output_folder)
+
+def test_nested_progress_bar():
+    # this works with .py but not in IPython
+    from tqdm.auto import tqdm
+    # from tqdm.notebook import tqdm
+    # from tqdm import tqdm
+    import time
+    for i in tqdm(range(5), desc="Outer Loop", position=0, dynamic_ncols=True):
+        # Inner loop (20 iterations), with a new progress bar for each outer iteration
+        for j in tqdm(range(10), desc="Inner Loop", position=1, leave=False, dynamic_ncols=True):
+            time.sleep(0.1)  # Simulate some work
+
+whisper_extract_the_Ark_s1_left()    
+vt.split_audio_by_sub(video_paths, subs_paths, output_folders)
+
+test_nested_progress_bar()
 
 extract_the_Ark_debug_01()
 srt_to_excel_Ark_s1()
