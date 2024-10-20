@@ -26,8 +26,8 @@ def export_season_07():
     os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
     
     faster_model_base = stable_whisper.load_faster_whisper('base')
-    BigBangFR = r"H:\D_Video\BigBang French\BigBang FR Season 05\Season 05 Audio\French"
-    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 05\Season 05 Audio\French Subtitle_base"
+    BigBangFR = r"H:\D_Video\BigBang French\BigBang FR Season 07\Season 07 Audio\French"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 07\Season 07 Audio\French Subtitle_base"
     
     vt.audio_to_sub(faster_model_base,BigBangFR,output_folder = output_folder)
 
@@ -80,9 +80,9 @@ def export_season_11():
     
     vt.audio_to_sub(faster_model_base,BigBangFR,output_folder = output_folder)
 
-export_season_11()
-export_season_10()
-export_season_09()
-export_season_08()
+# export_season_11()
+# export_season_10()
+# export_season_09()
+# export_season_08()
 export_season_05()
 export_season_07()
