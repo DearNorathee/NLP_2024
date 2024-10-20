@@ -14,8 +14,8 @@ import modeling_tool as ml
 import python_wizard as pw
 import stable_whisper
 import os
-
-ml.check_gpu()
+import os_toolkit as ost
+# ml.check_gpu()
 
 def extract_the_Ark_debug_01():
     import video_toolkit as vt
@@ -54,7 +54,7 @@ def whisper_extract_the_Ark_s1_left():
     input_audio_folder = [
         # r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E10 PT_PT.mp3",
         # r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E11 PT_PT.mp3",
-        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E12 PT_PT_Final_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E12 PT_Final_PT.mp3",
         
         ]
 
@@ -112,15 +112,24 @@ def test_nested_progress_bar():
         for j in tqdm(range(10), desc="Inner Loop", position=1, leave=False, dynamic_ncols=True):
             time.sleep(0.1)  # Simulate some work
 
-whisper_extract_the_Ark_s1_left()    
-vt.split_audio_by_sub(video_paths, subs_paths, output_folders)
+def create_BigBang_folder_structure():
+    input_path = r"H:\D_Video\BigBang French"
+    structure = ost.extract_folder_structure(input_path)
+    output_folder = r"H:\D_Video_Python\French\BigBang French"
+    ost.create_folder_structure(output_folder, structure)
 
-test_nested_progress_bar()
 
-extract_the_Ark_debug_01()
-srt_to_excel_Ark_s1()
+create_BigBang_folder_structure()
 
-split_audio_the_Ark_s1_whisper_sub()
-# extract_the_Ark()
-# whisper_extract_the_Ark_s1()
-split_audio_the_Ark_s1()
+# whisper_extract_the_Ark_s1_left()    
+# vt.split_audio_by_sub(video_paths, subs_paths, output_folders)
+
+# test_nested_progress_bar()
+
+# extract_the_Ark_debug_01()
+# srt_to_excel_Ark_s1()
+
+# split_audio_the_Ark_s1_whisper_sub()
+# # extract_the_Ark()
+# # whisper_extract_the_Ark_s1()
+# split_audio_the_Ark_s1()
