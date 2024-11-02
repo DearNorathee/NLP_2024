@@ -77,9 +77,10 @@ mySeed = 24
 
 skip_inx = [4,9,16,17,29,30,52,53,55,68,72,79,84, 124, 152, 153, 
             154, 155, 156, 184,186, 190, 191, 193,194,195,196,198,201,202,203,204, 219
+            259,
             
             ]
-easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200, 223, 227, 228]
+easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200, 223, 227, 228, 237, 242]
 
 # (2,'2-Jul-23')
 # (6,'2-Jul-23')
@@ -106,6 +107,8 @@ easy = [1,11,14,6,8,10,7,26,32, 133, 147, 148, 165,179, 181, 188,199,200, 223, 2
 
 # (166,'12-Apr-23')
 
+# (242,'12-Oct-24')
+
 #%%
 random_inx_list =list(range(start_inx,end_inx+1))
 
@@ -118,7 +121,7 @@ random.shuffle(random_inx_list)
 #%%
 ########################## run below recurrently ##################################
 # chosen_inx = random_inx_list[3]
-chosen_inx = 230
+chosen_inx = 260
 print(f"Index: {chosen_inx}")
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
@@ -137,8 +140,8 @@ print(text_pred)
 
 segments, _ = model_large.transcribe(audio_path,language="pt")
 text_pred = list(segments)[0][4]
-playsound(alarm_path)
 print(text_pred)
+playsound(alarm_path)
 
 # model_distil_large doesn't work
 # segments, _ = model_distil_large.transcribe(audio_path,language="pt")
