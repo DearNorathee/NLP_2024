@@ -1,3 +1,4 @@
+#%%
 import video_toolkit as vt
 from pathlib import Path
 from pydub import AudioSegment
@@ -5,15 +6,13 @@ import subprocess
 import os_toolkit as ost
 from tqdm.auto import tqdm
 
-
+#%%
 splitted_audio_folder:list[str|Path|None] = [None for _ in range(20)]
 input_audio_folder: list[str|Path|None] = [None for _ in range(20)]
 sub_folder: list[str|Path|None] = [None for _ in range(20)]
 
 
-# audio_path01 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\French\BigBang FR S06E01_FR.mp3"
-# sub_path01 = r"H:\D_Video\BigBang French\BigBang FR Season 06\Season 06 Audio\French Subtitle\BigBang FR S06E01_FR.srt"
-
+#%%
 # season 1 has no sub for some unknown reason
 # declare many paths
 for season_int in range(2,12):
@@ -36,10 +35,8 @@ for season in range(1,12):
     prefix_names[season] = each_season
 
 
-#vt.is_ffmpeg_installed()
-#test_segment = AudioSegment.from_file(audio_path01)
-# ost.delete_files_in_folder(splitted_audio_folder[6])
 
+#%%
 for season in tqdm(range(6,12), desc= f"Season "):
     episode_names = ost.get_filename(input_audio_folder[season])
     n_episode = len(episode_names)
