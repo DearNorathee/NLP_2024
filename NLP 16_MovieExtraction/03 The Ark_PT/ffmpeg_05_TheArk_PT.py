@@ -118,6 +118,33 @@ def create_BigBang_folder_structure():
     output_folder = r"H:\D_Video_Python\French\BigBang French"
     ost.create_folder_structure(output_folder, structure)
 
+def test_split_audio_by_sub():
+    media_paths: list[str] = [
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E03 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E04 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E05 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E06 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E07 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E08 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E09 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E10 PT_PT.mp3",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Audio Extracted\Portuguese\The Ark S01E11 PT_PT.mp3",
+
+    ]
+    sub_paths: list[str] = [
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E03 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E04 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E05 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E06 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E07 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E08 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E09 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E10 PT_PT.srt",
+        r"H:\D_Video_Python\Portuguese\The Ark_PT\Whisper base Subtitle PT\The Ark S01E11 PT_PT.srt",
+    ]
+    main_output_folder = r"H:\D_Video_Python\Portuguese\The Ark_PT\Splited Audio PT_test"
+    vt.split_audio_by_sub(media_paths=media_paths,sub_paths=sub_paths,output_folder=main_output_folder,modify_sub=True)
+
 split_audio_the_Ark_s1()
 # create_BigBang_folder_structure()
 
