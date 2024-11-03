@@ -118,8 +118,8 @@ def create_BigBang_folder_structure():
     output_folder = r"H:\D_Video_Python\French\BigBang French"
     ost.create_folder_structure(output_folder, structure)
 
-
-create_BigBang_folder_structure()
+split_audio_the_Ark_s1()
+# create_BigBang_folder_structure()
 
 # whisper_extract_the_Ark_s1_left()    
 # vt.split_audio_by_sub(video_paths, subs_paths, output_folders)
