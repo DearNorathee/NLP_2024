@@ -12,6 +12,9 @@ import pycountry
 import video_toolkit as vt
 from typing import Union, List
 import subprocess
+# NEXT: merge_media_to_video(work with both sub and audio as input)(NOT STARTED)
+# merge
+
 # https://www.geekyhacker.com/synchronize-audio-and-video-with-ffmpeg/
 
 # quick impact analysis
@@ -26,17 +29,21 @@ import subprocess
 
 video_name = "BigBang PT S06E01.mkv"
 audio_name = "BigBang FR S06E01_FR.mp3"
-output_name = "BigBang All S06E01_v03.mkv"
+output_name = "BigBang All S06E01_v06.mkv"
 
 
-video_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\inputs")
-audio_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\inputs")
-output_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\outputs")
+video_folder = Path(r"C:\C_Video_Python\Merge Language Video\tests\inputs")
+audio_folder = Path(r"C:\C_Video_Python\Merge Language Video\tests\inputs")
+output_folder = Path(r"C:\C_Video_Python\Merge Language Video\tests\outputs")
 
 video_path = video_folder / video_name
 audio_path = audio_folder / audio_name
 output_path = output_folder / output_name
 
+sub_path1 = r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang PT S03E01.srt"
+sub_path2 = r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang PT S03E02.srt"
+sub_path3 = r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang PT S03E03.srt"
+sub_path4 = r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang PT S03E04.srt"
 
 command = [
     # worked Now yeahhh.... (a:2)
@@ -45,8 +52,8 @@ command = [
     '-i', str(audio_path),
     '-map', '0',
     '-map', '1:a',
-    '-metadata:s:a:2', 'language=fre',
-    '-metadata:s:a:2', 'title=French',
+    '-metadata:s:a:2', 'language=por',
+    '-metadata:s:a:2', 'title=EP1',
     '-c', 'copy',
     str(output_path)
 ]
@@ -57,39 +64,38 @@ command07 = [
     # worked Now yeahhh.... (a:2)
     'ffmpeg',
     '-i', str(video_path),
-    '-i', str(audio_path),
-    '-i', str(audio_path),
-    '-i', str(audio_path),
+    '-i', str(sub_path1),
+
     '-map', '0',
-    '-map', '1:a',
-    '-map', '2:a',
-    '-map', '3:a',
+    '-map', '1:s',
     
-    '-metadata:s:a:2', 'language=fre',
-    '-metadata:s:a:2', 'title=French',
-    
-    '-metadata:s:a:3', 'language=spa',
-    '-metadata:s:a:3', 'title=Spanish',
-    '-metadata:s:a:4', 'language=ger',
-    '-metadata:s:a:4', 'title=German',
-    
+    '-metadata:s:s:1', 'language=por',
+    '-metadata:s:s:1', 'title=EP1',
+
     '-c', 'copy',
     str(output_path)
 ]
 
-
 command02 = [
+# test multiple subtitle
+    # worked Now yeahhh.... (a:2)
     'ffmpeg',
-    '-i', str(video_path),
-    '-itsoffset', '10',
-    '-i', str(audio_path),
-    '-c:a', 'copy',
-    '-c:v', 'copy',
-    # '-metadata:s:a:3', 'language=fre',
-    '-map', '0:a:0',
-    '-map', '1:v:0',
-    str(output_path)
+    '-i', str(r"C:\C_Video_Python\Merge Language Video\tests\outputs\BigBang All S06E01_v04.mkv"),
+    '-i', str(sub_path2),
+
+    '-map', '0',
+    '-map', '1:s',
+    
+    '-metadata:s:s:2', 'language=fre',
+    '-metadata:s:s:2', 'title=EP2',
+
+    '-c', 'copy',
+    str(r"C:\C_Video_Python\Merge Language Video\tests\outputs\BigBang All S06E01_v05.mkv")
 ]
+
+vt.get_all_metadata(r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang All S06E01_already_have_sub.mkv")
+vt.get_subtitle_index(r"C:\C_Video_Python\Merge Language Video\tests\inputs\BigBang All S06E01_already_have_sub.mkv")
+vt.get_subtitle_extension()
 
 command03 = [
     'ffmpeg',
@@ -172,24 +178,39 @@ if select_result.returncode != 0:
 
 
 
+# vt.merge_audio_to_video(
+#     input_video_path = video_path, 
+#     input_audio_path = audio_path, 
+#     audio_language_code_3alpha = "fre", 
+#     audio_title = "French02", 
+#     output_folder = output_folder, 
+#     output_name = output_name)
 
-vt.merge_audio_to_video(
+# vt.merge_audio_to_video(
+#     input_video_path = video_path, 
+#     input_audio_path = [audio_path,audio_path,audio_path], 
+#     audio_language_code_3alpha = ["fre","spa","ger"], 
+#     audio_title = ["French02","Spanish","German"], 
+#     output_folder = output_folder, 
+#     output_name = output_name)
+
+vt.merge_sub_to_video(
     input_video_path = video_path, 
-    input_audio_path = audio_path, 
-    audio_language_code_3alpha = "fre", 
-    audio_title = "French02", 
-    output_folder = output_folder, 
-    output_name = output_name)
+    input_subtitle_path = [sub_path1]
+    , subtitle_lang_code_3alpha = "fre"
+    , subtitle_title = "EP1"
+    , output_folder = output_folder
+    , output_name = output_name
+    ,replace=True
+    )
 
-vt.merge_audio_to_video(
+vt.merge_sub_to_video(
     input_video_path = video_path, 
-    input_audio_path = [audio_path,audio_path,audio_path], 
-    audio_language_code_3alpha = ["fre","spa","ger"], 
-    audio_title = ["French02","Spanish","German"], 
-    output_folder = output_folder, 
-    output_name = output_name)
+    input_subtitle_path = [sub_path1,sub_path2,sub_path3,sub_path4]
+    , subtitle_lang_code_3alpha = ["fre","spa","ger","fre"]
+    , subtitle_title = ["EP1","EP2","EP3","EP4"]
+    , output_folder = output_folder
+    , output_name = output_name)
 
-path01 = r"C:\Users\Heng2020\OneDrive\Python NLP\NLP 06_ffmpeg\BigBang All S06E01.mkv" 
-metadata01 = get_metadata(path01)
 
-metadata01 = get_metadata(video_path)
+
