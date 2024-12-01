@@ -9,41 +9,34 @@ from pathlib import Path
 from langcodes import Language
 import langcodes
 import pycountry
-
+import video_toolkit as vt
+from typing import Union, List
 import subprocess
 # https://www.geekyhacker.com/synchronize-audio-and-video-with-ffmpeg/
 
-def get_metadata(file_path):
-    try:
-        # Constructing the FFmpeg command
-        command = [
-            "ffmpeg",
-            "-i", str(file_path),
-            "-hide_banner"
-        ]
+# quick impact analysis
+# for S06E01
+# FR filesize = 917 MB
+# PR filesize = 586 MB
+# (total 1503)
 
-        # Running the command and capturing the output
-        result = subprocess.run(command, text=True, stderr=subprocess.PIPE, stdout=subprocess.DEVNULL)
+# reduce mem by 23%
+# merged filesize = 616 MB
 
-        # The metadata and other info are printed to stderr
-        return result.stderr
-    except subprocess.CalledProcessError as e:
-        # Handle errors (such as file not found, etc.)
-        print("An error occurred:", e)
-        return None
 
 video_name = "BigBang PT S06E01.mkv"
-audio_name = "The Big Bang Theory French S06E01.mp3"
-output_name = "BigBang All S06E01.mkv"
+audio_name = "BigBang FR S06E01_FR.mp3"
+output_name = "BigBang All S06E01_v03.mkv"
 
 
-video_folder = Path(r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\NLP 06_ffmpeg")
-audio_folder = Path(r"E:\Videos\The Big Bang Theory French Season 06\Audio")
-output_folder = Path(r"C:\Users\Heng2020\OneDrive\D_Code\Python\Python NLP\NLP 01\OutputData\extract_audio_1file\test_02")
+video_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\inputs")
+audio_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\inputs")
+output_folder = Path(r"H:\D_Video_Python\Merge Language Video\tests\outputs")
 
 video_path = video_folder / video_name
 audio_path = audio_folder / audio_name
 output_path = output_folder / output_name
+
 
 command = [
     # worked Now yeahhh.... (a:2)
@@ -57,6 +50,33 @@ command = [
     '-c', 'copy',
     str(output_path)
 ]
+
+
+command07 = [
+# test multiple audio
+    # worked Now yeahhh.... (a:2)
+    'ffmpeg',
+    '-i', str(video_path),
+    '-i', str(audio_path),
+    '-i', str(audio_path),
+    '-i', str(audio_path),
+    '-map', '0',
+    '-map', '1:a',
+    '-map', '2:a',
+    '-map', '3:a',
+    
+    '-metadata:s:a:2', 'language=fre',
+    '-metadata:s:a:2', 'title=French',
+    
+    '-metadata:s:a:3', 'language=spa',
+    '-metadata:s:a:3', 'title=Spanish',
+    '-metadata:s:a:4', 'language=ger',
+    '-metadata:s:a:4', 'title=German',
+    
+    '-c', 'copy',
+    str(output_path)
+]
+
 
 command02 = [
     'ffmpeg',
@@ -137,6 +157,9 @@ cmd_line = ' '.join(command)
 cmd_line
 
 result = subprocess.run(command, text=True, stderr=subprocess.PIPE)
+
+result = subprocess.run(command07, text=True, stderr=subprocess.PIPE)
+
 result02 = subprocess.run(command02, text=True, stderr=subprocess.PIPE)
 result03 = subprocess.run(command03, text=True, stderr=subprocess.PIPE)
 result04 = subprocess.run(command04, text=True, stderr=subprocess.PIPE)
@@ -146,7 +169,26 @@ select_result = result
 if select_result.returncode != 0:
     print("Error encountered:")
     print(result.stderr)
-    
+
+
+
+
+vt.merge_audio_to_video(
+    input_video_path = video_path, 
+    input_audio_path = audio_path, 
+    audio_language_code_3alpha = "fre", 
+    audio_title = "French02", 
+    output_folder = output_folder, 
+    output_name = output_name)
+
+vt.merge_audio_to_video(
+    input_video_path = video_path, 
+    input_audio_path = [audio_path,audio_path,audio_path], 
+    audio_language_code_3alpha = ["fre","spa","ger"], 
+    audio_title = ["French02","Spanish","German"], 
+    output_folder = output_folder, 
+    output_name = output_name)
+
 path01 = r"C:\Users\Heng2020\OneDrive\Python NLP\NLP 06_ffmpeg\BigBang All S06E01.mkv" 
 metadata01 = get_metadata(path01)
 
