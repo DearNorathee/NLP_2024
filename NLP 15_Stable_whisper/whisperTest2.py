@@ -23,6 +23,8 @@ import whisper
 # pip install -U stable-ts
 import stable_whisper
 
+from whisper.model import Whisper as whisper_model_Whisper
+
 import ffmpeg
 from playsound import playsound
 from pydub import AudioSegment
@@ -55,7 +57,7 @@ def play_audio_slower(audio_path, speed_factor):
 
 
 def transcribe_to_subtitle_1file(
-        model:Union[whisper.model.Whisper, faster_whisper.WhisperModel]
+        model:Union[whisper_model_Whisper, faster_whisper.WhisperModel]
         ,audio_path: Union[str,Path]
         ,output_name: Union[str,Path] = ""
         ,output_folder: Union[str,Path] = ""
@@ -81,7 +83,7 @@ def transcribe_to_subtitle_1file(
 
     output_path = Path(str(output_folder_in)) / output_name_in
     
-    if isinstance(model, (whisper.model.Whisper)):
+    if isinstance(model, (whisper_model_Whisper)):
         result = model.transcribe(audio_path)
     elif isinstance(model, (faster_whisper.WhisperModel)): 
         result = model.transcribe_stable(audio_path)
@@ -89,7 +91,7 @@ def transcribe_to_subtitle_1file(
 
 # NEXT write transcribe_to_subtitle to loop through the audio files and create subtitles
 def transcribe_to_subtitle(
-    model:Union[whisper.model.Whisper, faster_whisper.WhisperModel]
+    model:Union[whisper_model_Whisper, faster_whisper.WhisperModel]
     ,audio_path: Union[str,Path]
     ,output_name: Union[str,Path] = ""
     ,output_folder: Union[str,Path] = ""

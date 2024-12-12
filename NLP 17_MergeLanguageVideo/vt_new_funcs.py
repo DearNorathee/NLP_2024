@@ -5,72 +5,38 @@ Created on Thu Dec 12 10:34:03 2024
 @author: Heng2020
 """
 
+import whisper
+from whisper.model import Whisper as whisper_model_Whisper
+
+# import whisper.model.Whisper
+
 
 import video_toolkit as vt
 from typing import Union
 import pandas as pd
 from pathlib import Path
 
-# vt.merg
-bigbang_PT_video_folder = r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06"
-audio_extracted_folder = r"C:\C_Video_Python\Portuguese\BigBang PT\Audio Extracted\Portuguese"
-sub_PT_extracted_folder = r"C:\C_Video_Python\Portuguese\BigBang PT\Ori_Subtitle"
 
-# vt.extract_audio(bigbang_PT_video_folder, audio_extracted_folder,languages="Portuguese")
-# vt.extract_audio(bigbang_PT_video_folder, audio_extracted_folder,languages="Portuguese")
-vt.extract_subtitle(bigbang_PT_video_folder, sub_PT_extracted_folder)
+def test_merge_media_to1video():
+    input_video_path = r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06\BigBang PT S06E02.mkv"
+    output_folder = r"C:\C_Video_Python\Merge Language Video\tests\outputs"
+    output_name = "BigBang All S06E02_v02.mkv"
+    
+    info_df = pd.DataFrame({
+        'media_type': ['subtitle','audio','subtitle'],
+        'input_media_path': [
+            r'C:\C_Video_Python\Merge Language Video\BigBang PT Season 06\BigBang PT S06E02.srt',
+            r'C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\Season 06 Audio\BigBang FR S06E02_FR.mp3',
+            r'C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\Season 06 Audio\French Subtitle\BigBang FR S06E02_FR.srt',
+            ],
+        'title': ['Portuguese_Brazilian_whisper','French','French_whisper'],
+        'lang_code_3alpha': ['por','fre','fre']
+        
+        })
+    
+    vt.merge_media_to1video(input_video_path,info_df,output_folder,output_name)
+    
+test_merge_media_to1video()
 
-# merge_media_to1video()
-
-
-def merge_media_to1video(
-    input_video_path: Union[str, Path],
-    input_info_df:pd.DataFrame,
-    output_folder: str,
-    output_name: Union[str, Path] = ""
-):
-    import subprocess
-    from pathlib import Path
-
-    video_path = Path(input_video_path)
-    output_path = Path(output_folder) / output_name
-
-    command = ['ffmpeg', '-i', str(video_path)]
-
-    for _, row in input_info_df.iterrows():
-        command.extend(['-i', str(row['input_media_path'])])
-
-    command.append('-map')
-    command.append('0')
-
-    audio_count = 0
-    sub_count = 0
-    total_media = len(input_info_df)
-
-    # Mapping
-    for idx, row in enumerate(input_info_df.itertuples(), start=1):
-        if row.media_type == 'audio':
-            command.append('-map')
-            command.append(f'{idx}:a')
-        elif row.media_type == 'subtitle':
-            command.append('-map')
-            command.append(f'{idx}:s')
-
-    # Metadata
-    for row in input_info_df.itertuples():
-        lang = row.lang_code_3alpha
-        title = row.title
-        if row.media_type == 'audio':
-            command.extend([f'-metadata:s:a:{audio_count}', f'language={lang}'])
-            command.extend([f'-metadata:s:a:{audio_count}', f'title={title}'])
-            audio_count += 1
-        elif row.media_type == 'subtitle':
-            command.extend([f'-metadata:s:s:{sub_count}', f'language={lang}'])
-            command.extend([f'-metadata:s:s:{sub_count}', f'title={title}'])
-            sub_count += 1
-
-    command.extend(['-c', 'copy', str(output_path)])
-    result = subprocess.run(command, text=True, stderr=subprocess.PIPE)
-    if result.returncode != 0:
-        print("Error encountered:")
-        print(result.stderr)
+    
+    
