@@ -20,11 +20,13 @@ from typing import Union
 import pandas as pd
 from pathlib import Path
 import dataframe_short as ds
+from beartype import beartype
 # vt.mer
 # vt.merge_media_to1video(input_video_path, input_info_df, output_folder,)
+
 def test_merge_media_to1video():
     input_video_path = r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06\BigBang PT S06E02.mkv"
-    output_folder = r"C:\C_Video_Python\Merge Language Video\tests\outputs"
+    output_folder = r"C:\C_Video_Python\Merge Language Video\tests\outputs\test_merge_media_to1video\test_01"
     output_name = "BigBang All S06E02_v02.mkv"
     
     info_df = pd.DataFrame({
@@ -41,7 +43,7 @@ def test_merge_media_to1video():
     
     vt.merge_media_to1video(input_video_path,info_df,output_folder,output_name)
     
-# test_merge_media_to1video()
+test_merge_media_to1video()
 
 
 def test__create_media_dict_info():
@@ -117,6 +119,9 @@ def df_to_srt(df: pd.DataFrame, output_name: str, output_folder: Union[str, Path
 df_to_srt(ass_sub_df[0],"BigBang FR S06E01_EN.srt",r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\English Ori Subtitles\srt_converted")
 
 df_to_srt(ass_sub_df[0],"BigBang FR S06E01_EN.srt",Path(r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\English Ori Subtitles\srt_converted"))
+
+
+
 
 
     
