@@ -5,6 +5,9 @@ Created on Thu Dec 12 10:34:03 2024
 @author: Heng2020
 """
 
+# NEXT: performance impact analysis(for season6)
+# 1) start deploying this solution starting with season7
+# 2) check the resolution for FR vs PT if in big screen shows little significance than go with PT(lower memory)
 
 import os_toolkit as ost
 
@@ -22,55 +25,6 @@ import pandas as pd
 from pathlib import Path
 import dataframe_short as ds
 from beartype import beartype
-# vt.mer
-# vt.merge_media_to1video(input_video_path, input_info_df, output_folder,)
-
-def create_media_info_df(
-    input_video_folder:str|Path    
-    ,ep_seasons: list[str]| str
-    ,media_types: list[str]
-    ,input_media_folders: list[str]
-    ,input_filname_patterns: list[str]
-    ,titles: list[str]
-    ,lang_code_3chrs: list[str]
-    ,output_folder:str
-    ) -> pd.DataFrame:
-    """
-    helper function to create media_info combinations(pd.df) to feed in to merge_media_to_video
-    """
-    def _replace_with_filename(patterns:list[str],new:str, old:str = "<>") -> List[str]:
-        result: List[str] = patterns.copy()
-        for i, x in enumerate(patterns):
-            x_new = x.replace(old,new)
-            result[i] = x_new
-        return result
-
-    lengths: List[int] = [len(media_types), len(input_media_folders), len(input_filname_patterns), len(titles), len(lang_code_3chrs)]
-    if len(set(lengths)) > 1:
-        raise ValueError(f"All input lists must have the same length, but got lengths: {lengths}")
-
-    media_per_ep = len(media_types)
-    out_df = pd.DataFrame()
-
-    for i, ep_season_text in enumerate(ep_seasons):
-        input_filenames = _replace_with_filename(input_filname_patterns,ep_season_text)
-        
-        input_media_paths = []
-        for i, filename in input_filenames:
-            input_media_paths.append(input_media_folders[i] + "/" + filename)
-        
-        output_folder_rep = [output_folder]*media_per_ep
-        df_curr_ep = pd.DataFrame({
-            'media_type': media_types,
-            'title': titles,
-            'lang_code_3alpha': lang_code_3chrs,
-            'output_folder': output_folder_rep,
-            'input_media_path':input_media_paths,
-            'output_name': 'test'
-            
-        })
-        out_df = pd.concat([out_df,df_curr_ep])
-    return out_df
 
 
 def test_merge_media_to1video():
@@ -152,8 +106,9 @@ def test_create_media_info_df():
     # 
     input_filname_patterns: list[str] = ["BigBang PT <>.srt","BigBang FR <>_FR.mp3","BigBang FR <>_FR.srt","BigBang FR <>_EN.srt"]
     
-    actual01 = create_media_info_df(
+    actual01 = vt.create_media_info_df(
         input_video_folder =  input_video_folder
+        ,input_video_pattern = "BigBang PT <>.mkv"
         ,ep_seasons = ep_seasons
         ,media_types = media_types
         ,input_media_folders = input_media_folders
@@ -163,11 +118,145 @@ def test_create_media_info_df():
         ,output_folder = output_folder)
     print()
 
+def test_merge_media_to_video_01():
+    import os_toolkit as ost
+    input_video_folder:str|Path = r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06"
+    # error in episode 21
+    ep_seasons: list[str]| str = []
+    for i in range(1,25):
+        ep_seasons.append(f"S06E{str(i).zfill(2)}")
+    
+    media_types: list[str] = ["subtitle","audio","subtitle","subtitle","subtitle"]
+    input_media_folders: list[str] = [r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06",
+                                    r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\Season 06 Audio",
+                                    r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\French Ori Subtitles\srt_converted",
+                                    r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06",
+                                    r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\English Ori Subtitles\srt_converted"
+                                      ]
+    titles: list[str] = ["Portuguese_Brazilian_whisper","French","French_ori","French_whisper","English_ori"]
+    lang_code_3chrs: list[str] = ["por","fre","fre","fre","eng"]
+    output_folder:str = r"C:\C_Video_Python\Merge Language Video\tests\outputs\test_merge_media_to_video\test_02"
+
+    # use <> to represent the ep_seasons text
+    # 
+    input_filname_patterns: list[str] = [
+        "BigBang PT <>.srt"
+        ,"BigBang FR <>_FR.mp3"
+        ,"BigBang FR <>_FR.srt"
+        ,"BigBang FR <>_FR.srt"
+        ,"BigBang FR <>_EN.srt"]
+    
+    ost.delete_files_in_folder(output_folder)
+    
+    actual01 = vt.create_media_info_df(
+        input_video_folder =  input_video_folder
+        ,input_video_pattern = "BigBang PT <>.mkv"
+        ,ep_seasons = ep_seasons
+        ,media_types = media_types
+        ,input_media_folders = input_media_folders
+        ,input_filname_patterns = input_filname_patterns
+        ,titles = titles
+        ,lang_code_3chrs = lang_code_3chrs
+        ,output_folder = output_folder)
+    vt.merge_media_to_video(actual01)
+    print()
+
+def test_merge_media_to_video_02():
+    # this is fix
+    """
+    the reason only episode 21 has an error because the sub start at exact 0 time(which has incorrect format)
+    I fixed that manually
+    """
+    
+    import os_toolkit as ost
+    input_video_folder:str|Path = r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06"
+    # error in episode 21
+    ep_seasons: list[str]| str = ["S06E21"]
+    # for i in range(1,25):
+    #     ep_seasons.append(f"S06E{str(i).zfill(2)}")
+    # all of media paths seems to exist
+    
+    media_types: list[str] = [
+        "subtitle",
+        "audio",
+        "subtitle",
+        "subtitle",
+        "subtitle",
+        ]
+    
+    # 
+    input_media_folders: list[str] = [
+        r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06",
+        r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\Season 06 Audio",
+        r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\French Ori Subtitles\srt_converted",
+        r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06",
+        r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\English Ori Subtitles\srt_converted"
+                                      ]
+    titles: list[str] = [
+        "Portuguese_Brazilian_whisper",
+        "French",
+        "French_ori",
+        "French_whisper",
+        "English_ori",
+        ]
+    lang_code_3chrs: list[str] = [
+        "por",
+        "fre",
+        "fre",
+        "fre",
+        "eng",
+        ]
+    output_folder:str = r"C:\C_Video_Python\Merge Language Video\tests\outputs\test_merge_media_to_video\test_03"
+
+    # use <> to represent the ep_seasons text
+    # 
+    input_filname_patterns: list[str] = [
+        "BigBang PT <>.srt",
+        "BigBang FR <>_FR.mp3",
+        "BigBang FR <>_FR.srt",
+        "BigBang FR <>_FR.srt",
+        "BigBang FR <>_EN.srt",
+        ]
+    
+    ost.delete_files_in_folder(output_folder)
+    
+    actual01 = vt.create_media_info_df(
+        input_video_folder =  input_video_folder
+        ,input_video_pattern = "BigBang PT <>.mkv"
+        ,ep_seasons = ep_seasons
+        ,media_types = media_types
+        ,input_media_folders = input_media_folders
+        ,input_filname_patterns = input_filname_patterns
+        ,titles = titles
+        ,lang_code_3chrs = lang_code_3chrs
+        ,output_folder = output_folder)
+    vt.merge_media_to_video(actual01)
+    print()
+
+def _check_if_all_media_paths_exist():
+    # for episode 21
+    import os
+    media_paths = [
+        r"C:\C_Video_Python\Merge Language Video\BigBang PT Season 06/BigBang PT S06E21.srt"
+        ,r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\Season 06 Audio/BigBang FR S06E21_FR.mp3"
+        ,r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\French Ori Subtitles\srt_converted/BigBang FR S06E21_FR.srt"
+        ,r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06/BigBang FR S06E21_FR.srt"
+        ,r"C:\C_Video_Python\Merge Language Video\BigBang FR Season 06\English Ori Subtitles\srt_converted/BigBang FR S06E21_EN.srt"
+    ]
+    for media_path in media_paths:
+        if not os.path.exists(media_path):
+            print("This path doesn't exist")
+            print(media_path)
+
+    
 # it seems like subtitle(ENG) in S06E19 is slightly behind the audio(after minute 12)
 # test_ass_to_srt_1file()
-test_create_media_info_df()
-test_ass_to_srt_1file()
-test_ass_to_srt()
+# test_merge_media_to_video_01()
+# _check_if_all_media_paths_exist()
+test_merge_media_to_video_02()
+# test_create_media_info_df()
+# test_ass_to_srt_1file()
+# test_ass_to_srt()
 # vt.ass_to_srt(srt_paths, output_folder)
 
 
