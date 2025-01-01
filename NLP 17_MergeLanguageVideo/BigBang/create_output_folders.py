@@ -129,14 +129,27 @@ def extract_bigbang_sub_per_season(season:int) -> None:
     en_sub_ass_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .ass"
     en_sub_srt_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .srt"
     
+    
     vt.extract_subtitle(video_folder = french_video_folder, output_folder = fr_sub_ass_folder,languages="fre")
     vt.extract_subtitle(video_folder = french_video_folder, output_folder = en_sub_ass_folder,languages="eng")
     pass
 
+def test_extract_sub_1_video():
+    video_path01 = r"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01.mkv"
+
+    french_video_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02"
+    fr_sub_ass_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_ori .ass"
+    fr_sub_srt_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_ori .srt"
+    
+    en_sub_ass_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .ass"
+    en_sub_srt_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .srt"
+
+    vt.extract_sub_1_video(video_path=video_path01,output_folder=fr_sub_ass_folder,languages="fre")
 
 
 def main():
     # copy_files_to_dedicated_working_folder()
+    # test_extract_sub_1_video()
     extract_bigbang_sub_per_season(2)
     # copy_files_per_season(10)
     # copy_files_to_dedicated_working_folder()
