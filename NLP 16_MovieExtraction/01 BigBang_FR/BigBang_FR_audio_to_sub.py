@@ -8,6 +8,19 @@ Created on Sat Aug 10 15:25:18 2024
 import video_toolkit as vt
 import stable_whisper
 
+
+def export_season_01():
+    # as of Aug,10,2024 cuda was still not install correctly, so I'm going to use model from 
+    import os
+    # make sure that fast_whisper will not throw weird error
+    os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+    
+    faster_model_base = stable_whisper.load_faster_whisper('base')
+    BigBangFR = r"H:\D_Video\BigBang French\BigBang FR Season 01\Season 01 Audio\French"
+    output_folder = r"H:\D_Video\BigBang French\BigBang FR Season 01\Season 01 Audio\French Subtitle_base"
+    
+    vt.audio_to_sub(faster_model_base,BigBangFR,output_folder = output_folder)
+
 def export_season_05():
     # as of Aug,10,2024 cuda was still not install correctly, so I'm going to use model from 
     import os
@@ -81,6 +94,7 @@ def export_season_11():
     
     vt.audio_to_sub(faster_model_base,BigBangFR,output_folder = output_folder)
 
+export_season_01()
 # export_season_11()
 # export_season_10()
 # export_season_09()
