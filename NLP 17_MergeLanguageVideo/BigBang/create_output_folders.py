@@ -11,6 +11,16 @@ import shutil
 from tqdm import tqdm
 import video_toolkit as vt
 
+# NEXT: there's issue _1(filename issue) when .ass is generated(I can fix it manually)
+# generalize function extract_bigbang_sub_per_season to work with any season
+# fix converting .ass to .srt format when start at exactly time 0
+# create media_info_df for season 7
+# merge mediat_info_df for season 7
+
+# generalize the media_info_df to any seasons
+# merge video_media
+
+
 def create_bigbang_merge_folder() -> None:
     big_bang_merge_folder = r"C:\C_Video_Python\Merge Language Video"
     season_folder_names = []
