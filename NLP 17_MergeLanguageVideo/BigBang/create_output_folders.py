@@ -11,14 +11,12 @@ import shutil
 from tqdm import tqdm
 import video_toolkit as vt
 
-# NEXT: there's issue _1(filename issue) when .ass is generated(I can fix it manually)
-# generalize function extract_bigbang_sub_per_season to work with any season
-# fix converting .ass to .srt format when start at exactly time 0
-# create media_info_df for season 7
-# merge mediat_info_df for season 7
+# NEXT: 
+# (SKIP) there's issue _1(filename issue) when .ass is generated(I can fix it manually)(skip this step for now. Use the current pattern name for now)
 
-# generalize the media_info_df to any seasons
-# merge video_media
+
+# fix converting .ass to .srt format when start at exactly time 0(S06E21)
+# (exported and convert all of .ass to .srt from season1 to 11)(But haven't tested the result)
 
 
 def create_bigbang_merge_folder() -> None:
@@ -129,20 +127,31 @@ def copy_files_per_season(season:int) -> None:
     
 
 def run_extract_bigbang_sub_per_season():
-    pass
+    from tqdm import tqdm
+    for i in tqdm(range(1,12),desc="Processing each season...",colour="blue"):
+        extract_bigbang_sub_per_season(i,to_extract_subtitle=True)
 
-def extract_bigbang_sub_per_season(season:int) -> None:
-    french_video_folder = r"H:\D_Video\BigBang French\BigBang FR Season 02"
-    fr_sub_ass_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_ori .ass"
-    fr_sub_srt_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_ori .srt"
+def extract_bigbang_sub_per_season(
+        season:int
+        ,to_extract_subtitle:bool = True) -> None:
+    # tested with season 2&7
+    # there's _2(FR empty subtitle)(will need to delete )
+    season_srt = str(season).zfill(2)
     
-    en_sub_ass_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .ass"
-    en_sub_srt_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\English_ori .srt"
+    french_video_folder = fr"H:\D_Video\BigBang French\BigBang FR Season {season_srt}"
+    fr_sub_ass_folder = fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_srt}\Season {season_srt} Subtitle\French_ori .ass"
+    fr_sub_srt_folder = fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_srt}\Season {season_srt} Subtitle\French_ori .srt"
     
+    en_sub_ass_folder = fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_srt}\Season {season_srt} Subtitle\English_ori .ass"
+    en_sub_srt_folder = fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_srt}\Season {season_srt} Subtitle\English_ori .srt"
     
-    vt.extract_subtitle(video_folder = french_video_folder, output_folder = fr_sub_ass_folder,languages="fre")
-    vt.extract_subtitle(video_folder = french_video_folder, output_folder = en_sub_ass_folder,languages="eng")
-    pass
+    if to_extract_subtitle:
+        vt.extract_subtitle(video_folder = french_video_folder, output_folder = en_sub_ass_folder,languages="eng")
+        vt.extract_subtitle(video_folder = french_video_folder, output_folder = fr_sub_ass_folder,languages="fre")
+
+    vt.ass_to_srt(ass_paths = en_sub_ass_folder, output_folder = en_sub_srt_folder)
+    vt.ass_to_srt(ass_paths = fr_sub_ass_folder, output_folder = fr_sub_srt_folder)
+    
 
 def test_extract_sub_1_video():
     video_path01 = r"H:\D_Video\BigBang French\BigBang FR Season 02\BigBang FR S02E01.mkv"
@@ -160,7 +169,8 @@ def test_extract_sub_1_video():
 def main():
     # copy_files_to_dedicated_working_folder()
     # test_extract_sub_1_video()
-    extract_bigbang_sub_per_season(2)
+    run_extract_bigbang_sub_per_season()
+    # extract_bigbang_sub_per_season(6,to_extract_subtitle=False)
     # copy_files_per_season(10)
     # copy_files_to_dedicated_working_folder()
     pass
