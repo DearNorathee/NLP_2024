@@ -5,7 +5,7 @@ from tqdm import tqdm
 import video_toolkit as vt
 from pathlib import Path
 # NEXT: 
-# 1.(Optional) modify create_media_info_df so that it could work with info_tuple
+# 1.(Optional) modify create_media_info_df so that it could work with list_of_info
 # 2.(Split) Tuple into list and run the whole season 7
 
 # 3.(If run successful) quickly generalize this to any seasons
@@ -19,7 +19,7 @@ def create_media_info_df_1season(season:int):
             ep_str = str(i).zfill(2)
             ep_seasons.append(f"S{season_str}E{ep_str}")
 
-    info_tuple:list[tuple[str,str,str]] = [
+    list_of_info: list[tuple[str,str,str]] = [
         # ('media_type','title','lang','input_filename_pattern')
         ("subtitle", "Portuguese_Brazilian_ori",    "por",  "BigBang PT <>.srt"),
         ("subtitle", "English_ori",                 "eng",  "BigBang FR <>_1.srt"),
