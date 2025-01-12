@@ -121,7 +121,7 @@ random.shuffle(random_inx_list)
 #%%
 ########################## run below recurrently ##################################
 # chosen_inx = random_inx_list[3]
-chosen_inx = 293
+chosen_inx = 320
 print(f"Index: {chosen_inx}")
 audio_path = os.path.join(folder_path,file_path[chosen_inx])
 speed_factor = 1
