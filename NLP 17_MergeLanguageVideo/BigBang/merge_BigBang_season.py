@@ -13,7 +13,8 @@ import pandas as pd
 # NEXT: 
 # 1) Check what's wrong with S07E06, S07E19
     # => it's French subtitle format issue
-# 2) Run other season
+# 2) Ran and found that for some season audio needs scaling in order to align French audio to Portugese
+#   making hard to automate and pushing the Energy for this project up
 
 # I found the issue now, again it seems to be the problem when convertting .ass to .srt
 # error S08E09
@@ -36,7 +37,7 @@ def merge_media_info_df_1season(
     # error at S07E06
     
     season_str = str(season).zfill(2)
-    input_video_folder:str|Path = fr"D:\D_Video\BigBang Portugues\BigBang PT Season {season_str}"
+    input_video_folder:str|Path = fr"H:\H_Video\BigBang Portugues\BigBang PT Season {season_str}"
     ep_seasons: list[str]| str = []
     
     test_folder = f"test_{str(test).zfill(2)}"
@@ -70,12 +71,12 @@ def merge_media_info_df_1season(
     # input_filname_patterns: list[str] = ["BigBang PT <>.srt","BigBang FR <>_FR.mp3","BigBang FR <>_FR.srt","BigBang FR <>_EN.srt"]
 
     input_media_folders: list[str] = [
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\English_ori .srt",
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\French_ori .srt",
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\French",
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\French_whisper_base",
+        fr"H:\H_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\English_ori .srt",
+        fr"H:\H_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\French_ori .srt",
+        fr"H:\H_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\French",
+        fr"H:\H_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\French_whisper_base",
                                       ]
-    output_folder:str = fr"C:\C_Video_Python\Merge Language Video\BigBang Merged\BigBang Season {season_str}" + "/" + test_folder
+    output_folder:str = fr"H:\H_Video_Python\Merge Language Video\BigBang Merged\BigBang Season {season_str}" + "/" + test_folder
     
     output_folder_Path: Path = Path(output_folder)
     output_folder_Path.mkdir(parents=True, exist_ok=True)
@@ -110,5 +111,14 @@ def merge_media_info_df_1season(
     vt.merge_media_to_video(media_info_df_season,errors="warn")
     print()
 
-merge_media_info_df_1season(2,1)
+merge_media_info_df_1season(5,1)
 # for season 2 too₭about 6 min 30 s
+
+input_video_path01 = r"H:\H_Video_Python\Merge Language Video\BigBang Merged\BigBang Season 07\BigBang PT S07E01.mkv"
+meta_data01 = vt.get_all_metadata(input_video_path01)
+
+
+# ost.auto_rename_series(folder_path = "H:\H_Video\BigBang Portugues\BigBang PT Season 05", prefix = "BigBang PT")
+# ost.rename_files_replace_text(folder_path, old_text, new_text)
+
+
