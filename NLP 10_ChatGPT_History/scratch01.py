@@ -5,28 +5,9 @@ Created on Mon Apr  8 10:34:01 2024
 @author: Heng2020
 """
 import pandas as pd
-data = [
-    {
-        "state": "Florida",
-        "shortname": "FL",
-        "info": {"governor": "Rick Scott"},
-        "counties": [
-            {"name": "Dade", "population": 12345},
-            {"name": "Broward", "population": 40000},
-            {"name": "Palm Beach", "population": 60000},
-        ],
-    },
-    {
-        "state": "Ohio",
-        "shortname": "OH",
-        "info": {"governor": "John Kasich"},
-        "counties": [
-            {"name": "Summit", "population": 1234},
-            {"name": "Cuyahoga", "population": 1337},
-        ],
-    },
-]
+import video_toolkit as vt
 
-result = pd.json_normalize(
-    data, "counties", ["state", "shortname", ["info", "governor"]]
-)
+fr_sub_path = r"H:\H_Video_Python\Learn French\100 questions et réponses en français A1 à C1\100 questions et réponses en français (A1 à C1)_FR.srt"
+output_folder = r"H:\H_Video_Python\Learn French\100 questions et réponses en français A1 à C1"
+
+vt.srt_to_Excel(srt_path = fr_sub_path, output_path = output_folder)
