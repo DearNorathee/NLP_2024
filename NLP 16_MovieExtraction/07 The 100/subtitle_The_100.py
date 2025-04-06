@@ -9,7 +9,7 @@ import video_toolkit as vt
 import os
 import stable_whisper
 import whisper
-
+import torch
 
 input_video_path = r"H:\H_Download\Video 01\2024\The 100 - 7"
 audio_PT_path = r"C:\C_Video_Python\Portuguese\The 100\Audio Extracted\The 100 season 7\Portuguese mp3"
