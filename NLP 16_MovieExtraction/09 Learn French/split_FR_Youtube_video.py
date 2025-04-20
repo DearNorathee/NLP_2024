@@ -20,6 +20,7 @@ from typing import Literal
 # output_folder02 = r"H:\D_Video\Learn French\100 questions et réponses en français A1 à C1\Question and Answer Part_YoutubeSub\100 questions et réponses en français A1 à C1."
 # sub_paths = r"C:\C_Video\Learn French\Elisa\02_The French are rude and arrogant_FR.srt"
 # media_paths = r"C:\C_Video\Learn French\Elisa\02_The French are rude and arrogant.mp4"
+# I don't want what's wrong with git
 
 input_video_folder = r"C:\C_Video\Learn French\Elisa"
 input_sub_folder = r"C:\C_Video\Learn French\Elisa"
