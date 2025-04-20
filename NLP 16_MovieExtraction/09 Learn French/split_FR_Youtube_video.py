@@ -9,6 +9,9 @@ import shutil
 import os_toolkit as ost
 from typing import Literal
 
+
+# seems to work perfectly :>
+
 # sub_paths = r"H:\D_Video\Learn French\100 questions et réponses en français A1 à C1\100 questions et réponses en français (A1 à C1)_FR.srt"
 # media_paths = r"H:\D_Video\Learn French\100 questions et réponses en français A1 à C1\100 questions et réponses en français A1 à C1.mp4"
 
