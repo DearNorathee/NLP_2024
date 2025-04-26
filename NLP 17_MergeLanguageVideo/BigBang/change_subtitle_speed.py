@@ -14,6 +14,17 @@ from pathlib import Path
 import pandas as pd
 import datetime
 
+# NEXT: write change_subtitle_speed_1file using ost.new_filepath
+# then generalize it using inp.handle_multi_input and name it change_subtitle_speed
+# then generalize vt.change_audio_speed_1file and name it change_audio_speed
+
+# then calculate speedx factor for season 2
+# then test on BigBang thoery season 2
+# 
+
+
+
+
 def adjust_speed(
     time_obj: datetime.time,
     speedx: float
