@@ -7,6 +7,7 @@ Created on Sun Apr  6 11:46:37 2025
 import video_toolkit as vt
 from pathlib import Path
 from beartype import beartype
+from typing import Union
 
 # vt.change_audio_speed_1file(audio_path, speedx, output_name)
 
@@ -17,7 +18,12 @@ def test_change_audio_speed_1file():
     SPEEDX = 0.5
     vt.change_audio_speed_1file(audio_path01,SPEEDX,"BigBang FR S01E01_FR_cs.mp3",print_errors=True)
 
-
+def change_audio_speed(
+        audio_path: Union[str | Path, list[str|Path]],
+        speedx: int | float,
+        output_name: str | Path,
+        output_folder: str | Path = ""):
+    pass
 
 @beartype
 def change_audio_speed_1file(
