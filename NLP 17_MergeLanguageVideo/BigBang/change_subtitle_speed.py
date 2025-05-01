@@ -20,10 +20,6 @@ import datetime
 
 # then calculate speedx factor for season 2
 # then test on BigBang thoery season 2
-# 
-
-
-
 
 def adjust_speed(
     time_obj: datetime.time,
@@ -93,7 +89,7 @@ def test_adjust_speed():
     
 
 def change_subtitle_speed_df_1file(
-        sub_file:str|Path
+        sub_file:str|Path|pd.DataFrame
         , speedx: int|float) -> pd.DataFrame:
     """
     support both str and Path, and df
@@ -109,6 +105,18 @@ def change_subtitle_speed_df_1file(
     df_sub_adj['end'] = df_sub['end'].apply(lambda x: adjust_speed(x,speedx))
     
     return df_sub_adj                                                           
+
+def change_subtitle_speed_1file(
+    sub_file:str|Path
+    ,output_folder: str|Path
+    ,prefix:str = ""
+    ,suffix:str = ""
+    ) -> None:
+    import os_toolkit as ost
+
+    df_sub_adj = change_subtitle_speed_df_1file(sub_file)
+    new_path_name = ost.new_filename( sub_file, prefix=prefix, suffix= suffix)
+    vt.df_to_srt(df_sub_adj,new_path_name,output_folder=output_folder)
 
 def test_change_subtitle_speed_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
