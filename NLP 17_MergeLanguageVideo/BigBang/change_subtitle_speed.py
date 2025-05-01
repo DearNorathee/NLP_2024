@@ -94,34 +94,47 @@ def change_subtitle_speed_df_1file(
     """
     support both str and Path, and df
     """
+    import warnings
     if isinstance(sub_file, (str,Path)):
         df_sub = vt.sub_to_df(sub_file)
     elif isinstance(sub_file, pd.DataFrame):
         df_sub = sub_file.copy()
         
     df_sub_adj = df_sub.iloc[:,[0]]
-    
+    warnings.filterwarnings('ignore')
     df_sub_adj['start'] = df_sub['start'].apply(lambda x: adjust_speed(x,speedx))
     df_sub_adj['end'] = df_sub['end'].apply(lambda x: adjust_speed(x,speedx))
+    warnings.filterwarnings('default')
     
     return df_sub_adj                                                           
 
 def change_subtitle_speed_1file(
     sub_file:str|Path
+    ,speedx:int|float
     ,output_folder: str|Path
     ,prefix:str = ""
     ,suffix:str = ""
     ) -> None:
     import os_toolkit as ost
+    #  write now only support srt
+    # medium tested
+    
+    df_sub_adj = change_subtitle_speed_df_1file(sub_file,speedx=speedx)
+    new_name = ost.new_filename( sub_file, prefix=prefix, suffix= suffix)
+    vt.df_to_srt(df_sub_adj,new_name,output_folder=output_folder)
 
-    df_sub_adj = change_subtitle_speed_df_1file(sub_file)
-    new_path_name = ost.new_filename( sub_file, prefix=prefix, suffix= suffix)
-    vt.df_to_srt(df_sub_adj,new_path_name,output_folder=output_folder)
-
-def test_change_subtitle_speed_1file():
+def test_change_subtitle_speed_df_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
     df_sub_modified = change_subtitle_speed_df_1file(sub_path01,2)
 
+def test_change_subtitle_speed_1file():
+    sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
+    output_folder01 = r"C:\Users\Norat\OneDrive\Python MyLib\Python MyLib 01_test\test_folder\test_change_subtitle_speed_1file"
+    change_subtitle_speed_1file(sub_path01,2, output_folder01, suffix="speedx_2")
+    change_subtitle_speed_1file(sub_path01,0.96, output_folder01, suffix="speedx_0.96")
+    change_subtitle_speed_1file(sub_path01,0.959, output_folder01, suffix="speedx_0.959")
 
-test_adjust_speed()
+
+
 test_change_subtitle_speed_1file()
+test_adjust_speed()
