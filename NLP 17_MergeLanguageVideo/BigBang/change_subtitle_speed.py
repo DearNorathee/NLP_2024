@@ -13,6 +13,7 @@ import video_toolkit as vt
 from pathlib import Path
 import pandas as pd
 import datetime
+from beartype import beartype
 
 # NEXT: write change_subtitle_speed_1file using ost.new_filepath
 # then generalize it using inp.handle_multi_input and name it change_subtitle_speed
@@ -21,49 +22,6 @@ import datetime
 # then calculate speedx factor for season 2
 # then test on BigBang thoery season 2
 
-def adjust_speed(
-    time_obj: datetime.time,
-    speedx: float
-    ,shift_forward_sec: float|int = 0
-) -> datetime.time:
-    """
-    Adjust a datetime.time by a speed factor, using the datetime module alias directly.
-
-    Parameters
-    ----------
-    time_obj : datetime.time
-        The original time to adjust.
-    speedx : float
-        Speed factor: >1.0 makes time shorter (faster), <1.0 makes time longer (slower).
-
-    Returns
-    -------
-    datetime.time
-        The adjusted time.
-    """
-    # total seconds in the original time
-    #  Apr, 26, 2025
-    # 4o can't do it at one shot, this is from o4-mini
-
-    total_seconds = (
-        time_obj.hour * 3600
-        + time_obj.minute * 60
-        + time_obj.second
-        + time_obj.microsecond / 1_000_000
-    )
-
-    # adjust by speed factor
-    adjusted_seconds = total_seconds / speedx + shift_forward_sec
-
-    # reconstruct hours, minutes, seconds, microseconds
-    hours = int(adjusted_seconds // 3600)
-    rem = adjusted_seconds - hours * 3600
-    minutes = int(rem // 60)
-    rem -= minutes * 60
-    secs = int(rem)
-    micros = int((rem - secs) * 1_000_000)
-
-    return datetime.time(hour=hours, minute=minutes, second=secs, microsecond=micros)
 
 
 def test_adjust_speed():
@@ -85,43 +43,7 @@ def test_adjust_speed():
     assert expect01_02 == actual01_02
     assert expect02_01 == actual02_01
     
-    
-    
-
-def change_subtitle_speed_df_1file(
-        sub_file:str|Path|pd.DataFrame
-        , speedx: int|float) -> pd.DataFrame:
-    """
-    support both str and Path, and df
-    """
-    import warnings
-    if isinstance(sub_file, (str,Path)):
-        df_sub = vt.sub_to_df(sub_file)
-    elif isinstance(sub_file, pd.DataFrame):
-        df_sub = sub_file.copy()
-        
-    df_sub_adj = df_sub.iloc[:,[0]]
-    warnings.filterwarnings('ignore')
-    df_sub_adj['start'] = df_sub['start'].apply(lambda x: adjust_speed(x,speedx))
-    df_sub_adj['end'] = df_sub['end'].apply(lambda x: adjust_speed(x,speedx))
-    warnings.filterwarnings('default')
-    
-    return df_sub_adj                                                           
-
-def change_subtitle_speed_1file(
-    sub_file:str|Path
-    ,speedx:int|float
-    ,output_folder: str|Path
-    ,prefix:str = ""
-    ,suffix:str = ""
-    ) -> None:
-    import os_toolkit as ost
-    #  write now only support srt
-    # medium tested
-    
-    df_sub_adj = change_subtitle_speed_df_1file(sub_file,speedx=speedx)
-    new_name = ost.new_filename( sub_file, prefix=prefix, suffix= suffix)
-    vt.df_to_srt(df_sub_adj,new_name,output_folder=output_folder)
+                                                  
 
 def test_change_subtitle_speed_df_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
