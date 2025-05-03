@@ -23,46 +23,6 @@ from typing import Union, Literal
 # then calculate speedx factor for season 2
 # then test on BigBang thoery season 2
 
-@beartype
-def change_subtitle_speed(
-    sub_paths: Union[str, Path, list[str|Path]]
-    ,speedx:float|int
-    ,output_folder: str|Path
-    # input below would get import automatically
-    ,prefix: str = ""
-    ,suffix: str = ""
-    ,errors:Literal["warn","raise"] = "raise"
-    ,print_errors:bool = False
-
-    # handle_multi_input parameters
-    ,progress_bar: bool = True
-    ,verbose: int = 0
-    ,alarm_done: bool = False
-    ,alarm_error: bool = False
-    ,input_extension: str|None = [".ass",".srt"]
-    ) -> None:
-    
-
-    # medium tested
-    import inspect_py as inp
-    unique_input = {
-        "filepaths":sub_paths
-        ,"output_folder":output_folder
-
-        # unique inputs for variety of functions
-        ,"speedx":speedx
-    }
-    handle_multi_input_params = {
-        "progress_bar": progress_bar
-        ,"verbose":verbose
-        ,"alarm_done":alarm_done
-        ,"alarm_error":alarm_error
-        ,"input_extension":input_extension
-    }
-    func_temp = inp.handle_multi_input(**handle_multi_input_params)(vt.change_subtitle_speed_1file)
-    result = func_temp(**unique_input)
-    return result
-
 def test_adjust_speed():
     time01 = datetime.time(0,2,0)
     time02 = datetime.time(0,1,30)
@@ -91,8 +51,13 @@ def test_change_subtitle_speed():
     for i, curr_path in enumerate(test_output_paths):
         test_output_paths[i] = Path(test_output) / f"test_{str(i).zfill(2)}"
 
+    for i in range(1,5):
+        ost.delete_files_in_folder(test_output_paths[i],verbose=0)
 
-    change_subtitle_speed(test_input01,speedx=0.96,output_folder=test_output_paths[1] )                                 
+    vt.change_subtitle_speed(test_input01,speedx=0.96,output_folder=test_output_paths[1] )             
+    vt.change_subtitle_speed(test_input01,speedx=0.96,prefix="prefix",output_folder=test_output_paths[2] )                    
+    vt.change_subtitle_speed(test_input01,speedx=0.96,suffix="0.96x",output_folder=test_output_paths[3] )       
+    vt.change_subtitle_speed(test_input01,speedx=0.96,prefix="shift2sec",suffix="0.96x",output_folder=test_output_paths[4],shift_forward_sec=2 )   
 
 def test_change_subtitle_speed_df_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
