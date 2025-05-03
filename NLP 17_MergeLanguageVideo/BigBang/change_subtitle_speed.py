@@ -36,16 +36,21 @@ def change_subtitle_speed(
 
     # handle_multi_input parameters
     ,progress_bar: bool = True
-    ,verbose: int = 1
+    ,verbose: int = 0
     ,alarm_done: bool = False
     ,alarm_error: bool = False
     ,input_extension: str|None = [".ass",".srt"]
-    ):
+    ) -> None:
     
+
+    # medium tested
     import inspect_py as inp
-    path_input = {
+    unique_input = {
         "filepaths":sub_paths
         ,"output_folder":output_folder
+
+        # unique inputs for variety of functions
+        ,"speedx":speedx
     }
     handle_multi_input_params = {
         "progress_bar": progress_bar
@@ -55,7 +60,7 @@ def change_subtitle_speed(
         ,"input_extension":input_extension
     }
     func_temp = inp.handle_multi_input(**handle_multi_input_params)(vt.change_subtitle_speed_1file)
-    result = func_temp(**path_input)
+    result = func_temp(**unique_input)
     return result
 
 def test_adjust_speed():
