@@ -32,9 +32,9 @@ def test_adjust_speed():
     expect01_02 = datetime.time(0,1,10)
     expect02_01 = datetime.time(0,0,45)
     
-    actual01_01 = adjust_speed(time_obj = time01, speedx = 2)
-    actual01_02 = adjust_speed(time_obj = time01, speedx = 2, shift_forward_sec=10)
-    actual02_01 = adjust_speed(time_obj = time02, speedx = 2)
+    actual01_01 = vt.adjust_speed(time_obj = time01, speedx = 2)
+    actual01_02 = vt.adjust_speed(time_obj = time01, speedx = 2, shift_forward_sec=10)
+    actual02_01 = vt.adjust_speed(time_obj = time02, speedx = 2)
 
 
     
@@ -47,14 +47,14 @@ def test_adjust_speed():
 
 def test_change_subtitle_speed_df_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
-    df_sub_modified = change_subtitle_speed_df_1file(sub_path01,2)
+    df_sub_modified = vt.change_subtitle_speed_df_1file(sub_path01,2)
 
 def test_change_subtitle_speed_1file():
     sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Subtitle\French_whisper_base\BigBang FR S02E01_FR.srt"
     output_folder01 = r"C:\Users\Norat\OneDrive\Python MyLib\Python MyLib 01_test\test_folder\test_change_subtitle_speed_1file"
-    change_subtitle_speed_1file(sub_path01,2, output_folder01, suffix="speedx_2")
-    change_subtitle_speed_1file(sub_path01,0.96, output_folder01, suffix="speedx_0.96")
-    change_subtitle_speed_1file(sub_path01,0.959, output_folder01, suffix="speedx_0.959")
+    vt.change_subtitle_speed_1file(sub_path01,2, output_folder01, suffix="speedx_2")
+    vt.change_subtitle_speed_1file(sub_path01,0.96, output_folder01, suffix="speedx_0.96")
+    vt.change_subtitle_speed_1file(sub_path01,0.959, output_folder01, suffix="speedx_0.959")
 
 
 
