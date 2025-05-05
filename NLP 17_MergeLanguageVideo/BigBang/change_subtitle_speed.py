@@ -24,7 +24,9 @@ from typing import Union, Literal
 # then test on BigBang thoery season 2
 
 def test_change_audio_speed():
-    audio_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\French"
+    audio_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 01\Season 01 Audio\French"
+    audio_path02 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\French"
+
     test_output = r"C:\C_Video_Python\video_toolkit_test\test_change_audio_speed"
     test_output_paths = [None for _ in range(100)]
 
@@ -34,7 +36,8 @@ def test_change_audio_speed():
     for i in range(1,2):
         ost.delete_files_in_folder(test_output_paths[i],verbose=0)
     
-    change_audio_speed(audio_paths = audio_path01,speedx=0.96,output_folder=test_output_paths[1])
+    # change_audio_speed(audio_paths = audio_path01,speedx=0.96,output_folder=test_output_paths[1])
+    change_audio_speed(audio_paths = audio_path02,speedx=0.961324,output_folder=test_output_paths[2])
 
 @beartype
 def change_audio_speed(
@@ -165,6 +168,6 @@ def test_change_subtitle_speed_1file():
     vt.change_subtitle_speed_1file(sub_path01,0.959, output_folder01, suffix="speedx_0.959")
 
 test_change_audio_speed()
-test_change_subtitle_speed()
+# test_change_subtitle_speed()
 # test_change_subtitle_speed_1file()
 # test_adjust_speed()
