@@ -103,6 +103,9 @@ for season, audio_output_folder in output_audio_folders.items():
 for season, audio_output_folder in output_audio_folders.items():
     if season not in skip_season:
         ost.auto_rename_series(folder_path = output_sub_folders[season], prefix = "BigBang DE")
+        
+        
+
 # vt.extract_subtitle(video_folder=input_video_folders[1], output_folder = output_sub_folders[1],languages= LANG_CODE)
 
 # ost.auto_rename_series(folder_path = output_sub_folders[1], prefix = "BigBang DE")
@@ -110,3 +113,17 @@ for season, audio_output_folder in output_audio_folders.items():
 # vt.extract_sub_1_video(
 #     video_path = r"C:\DVDFab\StreamFab\Output\Netflix\The Big Bang Theory\S01\BigBang DE S01E01.mp4"
 #     , output_folder = output_sub_folders[1])
+
+def test_reset_start_timestamp_1audio():
+    input_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\German\BigBang DE S02E01_DE.mp3"
+    vt.reset_start_timestamp_1audio(input_path01,outfilename="fixed_BigBang DE S02E01_DE_v03.mp3"
+                                    ,output_folder=r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\German")
+
+def test_reset_start_timestamp():
+    input_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\German"
+    vt.reset_start_timestamp_1audio(input_path01
+                                    ,output_folder=r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\German")
+    
+test_reset_start_timestamp()
+test_reset_start_timestamp_1audio()
+
