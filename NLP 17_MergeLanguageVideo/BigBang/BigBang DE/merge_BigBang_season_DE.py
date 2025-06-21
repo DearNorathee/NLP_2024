@@ -7,22 +7,22 @@ import video_toolkit as vt
 from pathlib import Path
 import pandas as pd
 
+
+
 # season 1 the french audio doesn't seem to syn up perfectly
 
-# took about 1hr to modify from French to German(I don't know if I could design the code such that it would reduce to 30 min)
+# took about 1hr to modify from French to German
+# (I don't know if I could design the code such that it would reduce to 30 min)
 
 # NEXT: 
     # S02E15 German has no audio at the beginning it seems to be like this only 1 video
+    # (this problem is very weird)
     
-# Context: right now German audio isn't syn because it's start timestamp is about 0.023021 sec behind the video
-# Use this command to check start_timestamp
-# ffprobe -v error -select_streams a:0 -show_entries stream=start_time -of default=noprint_wrappers=1:nokey=1 "BigBang DE S02E01_DE.mp3"
-# I tried to reset the timestamp using ffmpeg but it doesn't seem to work
-# There are 2 ideas that I think might work
+# Context: right now German audio sync with video, because I cut 1 sec out of it.
+# 1) Check manually whether audio is sync for all ep's in season 2
+# 2) Modify the time of German's subtitle and merge again
+# ........ I hope that it would work this time 😊
 
-
-# 1) Using ffmpeg to cut the beggining of audio check out Onenote
-# 2) read mp3 using pydub then reexport it as mp3 again
     
 #%%
 def create_media_info_df_1season(
@@ -76,7 +76,7 @@ def create_media_info_df_1season(
 
     input_media_folders: list[str] = [
         fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix",
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\German",
+        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\German\cut_front_1_sec",
 
                                      ]
     
@@ -133,7 +133,7 @@ def merge_media_info_df_1season(
     print()
 
 #%%
-merge_media_info_df_1season(2,2)
+merge_media_info_df_1season(2,3)
 # merge_media_info_df_1season(5,1)
 # for season 2 took about 6 min 30 s
 
