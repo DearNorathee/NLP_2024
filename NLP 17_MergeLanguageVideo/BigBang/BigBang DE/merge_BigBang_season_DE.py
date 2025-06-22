@@ -7,21 +7,14 @@ import video_toolkit as vt
 from pathlib import Path
 import pandas as pd
 
-
-
 # season 1 the french audio doesn't seem to syn up perfectly
 
 # took about 1hr to modify from French to German
 # (I don't know if I could design the code such that it would reduce to 30 min)
 
 # NEXT: 
-    # S02E15 German has no audio at the beginning it seems to be like this only 1 video
-    # (this problem is very weird)
-    
-# Context: right now German audio sync with video, because I cut 1 sec out of it.
-# 1) Check manually whether audio is sync for all ep's in season 2
-# 2) Modify the time of German's subtitle and merge again
-# ........ I hope that it would work this time 😊
+    # Done with German except for season 1,11(some episodes) & 12 :>
+
 
     
 #%%
@@ -75,7 +68,7 @@ def create_media_info_df_1season(
     # input_filname_patterns: list[str] = ["BigBang PT <>.srt","BigBang FR <>_FR.mp3","BigBang FR <>_FR.srt","BigBang FR <>_EN.srt"]
 
     input_media_folders: list[str] = [
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix",
+        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix\cut_front_1_sec",
         fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\German\cut_front_1_sec",
 
                                      ]
@@ -133,9 +126,22 @@ def merge_media_info_df_1season(
     print()
 
 #%%
-merge_media_info_df_1season(2,3)
+merge_media_info_df_1season(3,1)
 # merge_media_info_df_1season(5,1)
-# for season 2 took about 6 min 30 s
+# for season 2 took about  2min 08 s
+
+
+merge_media_info_df_1season(2,3)
+merge_media_info_df_1season(3,1)
+merge_media_info_df_1season(4,1)
+merge_media_info_df_1season(5,1)
+merge_media_info_df_1season(6,1)
+merge_media_info_df_1season(7,1)
+merge_media_info_df_1season(8,1)
+merge_media_info_df_1season(9,1)
+merge_media_info_df_1season(10,1)
+merge_media_info_df_1season(11,1)
+merge_media_info_df_1season(12,1)
 
 # input_video_path01 = r"H:\H_Video_Python\Merge Language Video\BigBang Merged\BigBang Season 07\BigBang PT S07E01.mkv"
 # meta_data01 = vt.get_all_metadata(input_video_path01)
