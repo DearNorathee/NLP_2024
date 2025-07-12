@@ -25,7 +25,7 @@ input_video_folders: dict[int, Union[str,Path]] = {}
 output_audio_folders: dict[int, Union[str,Path]] = {}
 output_sub_folders: dict[int, Union[str,Path]] = {}
 
-skip_season = []
+skip_season = [1,7]
 
 LANGUAGE:str = "French"
 # the_100_fr_s1 = r"C:\C_Video\French\The 100 FR\The 100 Season 01 French"
@@ -67,33 +67,36 @@ for i, season in enumerate(avaliable_seasons):
 # the_100_PT_mem = ost.filesize_in_folder("G:\My Drive\G_Videos\Portuguese\The 100 PT")
 
 
-vt.create_series_working_folder(
-    series_name = "The 100"
-    ,create_structure_at = r"C:\C_Video_Python"
-    ,audio_folders = ["French","Portuguese","English","Spanish","German"]
-    ,subtitle_folders = ["English_ori",  "Portuguese_ori",  "Portuguese_whisper_base","French_whisper_base",]
-    ,end_seasons = 6)
+# vt.create_series_working_folder(
+#     series_name = "The 100"
+#     ,create_structure_at = r"C:\C_Video_Python"
+#     ,audio_folders = ["French","Portuguese","English","Spanish","German"]
+#     ,subtitle_folders = ["English_ori",  "Portuguese_ori",  "Portuguese_whisper_base","French_whisper_base",]
+#     ,end_seasons = 7)
 
 
-# extract audio
-# for season, audio_output_folder in output_audio_folders.items():
+# extract audio for all seasons
+for season, audio_output_folder in output_audio_folders.items():
 
-#     if season not in skip_season:
-#         if os.path.exists(audio_output_folder):
-#             if not os.path.exists(output_audio_folders[season]):
-#                 os.makedirs(output_audio_folders[season], exist_ok=True)
+    if season not in skip_season:
+        if os.path.exists(audio_output_folder):
+            if not os.path.exists(output_audio_folders[season]):
+                os.makedirs(output_audio_folders[season], exist_ok=True)
                 
-#             vt.extract_audio(
-#                 video_folder=input_video_folders[season],
-#                 output_folder=output_audio_folders[season],
-#                 languages= LANGUAGE
-#                 )
+            vt.extract_audio(
+                video_folder=input_video_folders[season],
+                output_folder=output_audio_folders[season],
+                # languages= LANGUAGE
+                )
                 
-#             print(f"Done season: {season}✅")
-#         else:
-#             print(f"{audio_output_folder} does not exist. ❌")
+            print(f"Done season: {season}✅")
+        else:
+            print(f"{audio_output_folder} does not exist. ❌")
 
-# vt.extract_audio(video_folder=input_video_folders[1], output_folder = output_audio_folders[1])
+
+# extract audio for 1 season(for debugging)
+# took about 10 min for per season
+vt.extract_audio(video_folder=input_video_folders[1], output_folder = output_audio_folders[1])
 
 
 vt.extract_audio_1file(video_path = r"C:\C_Video\French\The 100 FR\The 100 Season 01 French\The 100 FR_S01E01.avi"
