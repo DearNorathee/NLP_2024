@@ -18,7 +18,7 @@ big_bang_FR = r"H:\D_Video\BigBang French"
 big_bang_PT_s06 = r"H:\D_Video\BigBang Portugues\BigBang PT Season 06"
 big_bang_FR_s06 = r"H:\D_Video\BigBang French\BigBang FR Season 06"
 
-merged_video = r"C:\C_Video_Python\Merge Language Video\tests\outputs\test_merge_media_to_video"
+merged_video = r"C:\C_Video_Python\Merge Language Video\BigBang Merged"
 merged_video_s06 = r"C:\C_Video_Python\Merge Language Video\tests\outputs\test_merge_media_to_video\test_02"
 
 big_bang_PT_mem = ost.filesize_in_folder(big_bang_PT)
@@ -34,3 +34,5 @@ big_bang_FR_s06_mem = big_bang_FR_s06_mem.loc[big_bang_FR_s06_mem["filesize"] > 
 merged_video_s06_mem = ost.filesize_in_folder(merged_video_s06)
 
 
+path_test01 = r"G:\My Drive\G_Videos\Movies\01_Harry Potter\Harry Potter German"
+mem_test01 = ost.filesize_in_folder(path_test01)
