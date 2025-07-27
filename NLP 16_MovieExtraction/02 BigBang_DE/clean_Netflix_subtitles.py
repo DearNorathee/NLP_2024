@@ -9,40 +9,29 @@ import video_toolkit as vt
 from pathlib import Path
 from beartype import beartype
 from typing import Union, Literal
+import os
+import os_toolkit as ost
 
-def test_clean_netflix_srt_1file():
-    sub_path = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original\BigBang DE S06E01.srt"
-    output_folder = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original_no_speakers"
-    vt.clean_Netflix_srt_1file(sub_path, output_folder)
+def create_cleaned_sub_BigBang():
+    from tqdm import tqdm
+    seasons = [i for i in range(1,13)]
+    error_count = 0
+    for season in tqdm(seasons, desc="processing...",colour='blue'):
+        try:
+            season_str = str(season).zfill(2)
+            sub_original_folder = fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix\original"
+            # ost.delete_files_in_folder(sub_original_folder)
+            ori_no_speakers_folder = Path(sub_original_folder).parent / "original_no_speakers"
+            # Create the folder (and any missing parents) if it doesn’t exist
+            ori_no_speakers_folder.mkdir(parents=True, exist_ok=True)
+            vt.clean_Netflix_srt(sub_original_folder,ori_no_speakers_folder)
+        except:
+            print(f"There's an error in season: {season}. ❌")
+            error_count += 1
+    if error_count == 0:
+        print("All seasons are processed correctly. 😊✅")
 
-def test_clean_netflix_srt():
-    sub_path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original"
-    output_folder01 = r"C:\C_Video_Python\video_toolkit_test\test_clean_netflix_srt\test_01"
-
-    sub_path02 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original\BigBang DE S06E01.srt"
-    output_folder02 = r"C:\C_Video_Python\video_toolkit_test\test_clean_netflix_srt\test_02"
-
-    sub_path03 = [
-        r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original\BigBang DE S06E01.srt",
-        r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original\BigBang DE S06E02.srt",
-        r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original\BigBang DE S06E03.srt",
-        
-        ]
-    output_folder03 = r"C:\C_Video_Python\video_toolkit_test\test_clean_netflix_srt\test_03"
-
-    sub_path04 = [
-        r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original"
-    ]
-    output_folder04 = r"C:\C_Video_Python\video_toolkit_test\test_clean_netflix_srt\test_04"
-
-    vt.clean_Netflix_srt(sub_path01, output_folder01)
-    vt.clean_Netflix_srt(sub_path02, output_folder02)
-    vt.clean_Netflix_srt(sub_path03, output_folder03)
-    # list of folders are not yet implemented in inp.handle_multi_input
-    # clean_Netflix_srt(sub_path04, output_folder04)  
-
-# test_clean_netflix_srt_1file()
-test_clean_netflix_srt()
+create_cleaned_sub_BigBang()
 
 
 
