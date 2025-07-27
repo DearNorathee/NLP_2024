@@ -34,5 +34,10 @@ def create_cleaned_sub_BigBang():
 create_cleaned_sub_BigBang()
 
 
+vt.srt_to_Excel(srt_path = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original_no_speakers"
+    , output_path = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 06\Season 06 Subtitle\German Netflix\original_no_speakers"
+    )
+
+
 
 
