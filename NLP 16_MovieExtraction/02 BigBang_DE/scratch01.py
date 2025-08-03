@@ -21,5 +21,5 @@ def test_cut_front():
     output_folder01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 02\Season 02 Audio\German\cut_front_1_sec"
     vt.cut_front(audio01,1,output_folder01)
 
-test_cut_front()
+# test_cut_front()
     

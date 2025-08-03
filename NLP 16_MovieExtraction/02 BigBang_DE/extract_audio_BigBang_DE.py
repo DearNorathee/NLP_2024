@@ -121,4 +121,6 @@ for season in sub_adj_folder.keys():
 # cut front 1 sec for audio
 for season in sub_adj_folder.keys():
     vt.cut_front_audio(filepaths = output_audio_folders[season], sec = 1,output_folder = audio_adj_folder[season])
+    
+
 

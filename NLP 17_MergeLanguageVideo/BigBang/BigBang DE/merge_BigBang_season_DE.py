@@ -68,8 +68,8 @@ def create_media_info_df_1season(
     # input_filname_patterns: list[str] = ["BigBang PT <>.srt","BigBang FR <>_FR.mp3","BigBang FR <>_FR.srt","BigBang FR <>_EN.srt"]
 
     input_media_folders: list[str] = [
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix\cut_front_1_sec",
-        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\German\cut_front_1_sec",
+        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Subtitle\German Netflix\final_selection",
+        fr"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {season_str}\Season {season_str} Audio\German\final_selection",
 
                                      ]
     
@@ -135,7 +135,7 @@ merge_media_info_df_1season(2,3)
 merge_media_info_df_1season(3,1)
 merge_media_info_df_1season(4,1)
 merge_media_info_df_1season(5,1)
-merge_media_info_df_1season(6,1)
+merge_media_info_df_1season(6,2)
 merge_media_info_df_1season(7,1)
 merge_media_info_df_1season(8,1)
 merge_media_info_df_1season(9,1)
