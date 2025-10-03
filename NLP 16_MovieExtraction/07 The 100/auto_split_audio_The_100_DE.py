@@ -29,9 +29,27 @@ for episode in range(1,14):
 
 # there's a bug in split_audio_by_sub, I can't split the audio
 # possibly because of empyty text case
+
+# wav vs mp3
+# It took about 7 times longer to produce mp3 compared to wav
+# But the memory of mp3 is 10 times less than wav
+
+# when use wav it took about 30 sec per episode
 vt.split_audio_by_sub(
     media_paths = audio_path
     , sub_paths = sub_path
     , output_folder = output_path
     , prefix_names=each_season
+    ,out_audio_ext='wav'
     )
+
+
+vt.split_audio_by_sub(
+    media_paths = audio_path
+    , sub_paths = sub_path
+    , output_folder = output_path
+    , prefix_names=each_season
+    ,out_audio_ext='mp3'
+    )
+
+vt.srt_to_Excel(srt_path = sub_path, output_path = sub_path)
