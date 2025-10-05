@@ -1,0 +1,103 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct  3 11:47:38 2025
+
+@author: Norat
+"""
+# took about    
+    # 3 hr (Oct 3, 2025) (Done main logic)
+    # 0.5 hr (Oct 4,2025) (Packaged functions and generalize)
+
+# main logic is done NEXT: focus on package the function in main_orginizer(function)
+# generalize to use this in other series, (move_file_bulk)
+
+# seperate template_dict(original template dict for mapping langauge_code: langauge_name) this will speed things up quite a bit
+# 
+
+import video_toolkit as vt
+import os_toolkit as ost
+from typing import Dict, Literal, Union, List, Callable
+from pathlib import Path
+import os
+from play_audio_file import play_alarm_done, play_alarm_error
+import py_string_tool as pst
+import pandas as pd
+
+
+
+def map_filename_to_lang(path: str|Path, mapping_dict: dict[str, str]) -> str:
+    """
+    Map the filename to the language.
+    """
+    path_obj = Path(path)
+    
+    filename = path_obj.stem
+    lang_2chr = filename.split("_")[-1]
+    language_name = mapping_dict[lang_2chr]
+    return language_name
+
+def make_lang_start_dict():
+    # seperate dict creation from mapping to langauge folder to speed things up quite significantly
+    lang_dict_lower = vt.make_all_language_dict(key_as="alpha3",value_as="name")  
+    # lang_dict_upper = dict()
+    # for key, value in lang_dict_lower.items():
+    #     lang_dict_upper[key.upper()] = value
+    # lang_dict_upper['PT'] = 'Portuguese_Brazil'
+    # lang_dict_upper['ES'] = 'Spanish (Latin America)'
+    return lang_dict_upper
+
+def test_map_filename_to_lang():
+    """
+    Test the map_filename_to_lang function.
+    """
+    path01 = r"C:\C_Video_Python\The Mentalist\The Mentalist Season 07\Season 07 Subtitle\Amazon_temp\The Mentalist_S07E01_1_kor.srt"
+    mapping_dict = make_lang_start_dict()
+    actual01 = map_filename_to_lang(path01, mapping_dict)
+    print(actual01)
+
+# move_media_file_bulk
+def main_orginizer():
+    
+    from pandarallel import pandarallel
+    import shutil
+    from tqdm.auto import tqdm
+    from functools import partial
+
+    # pandarallel.initialize(progress_bar=True)
+    season:int = 7
+    season_str = str(season).zfill(2)
+
+    input_root_path = fr"C:\C_Video_Python\The Mentalist\The Mentalist Season {season_str}\Season {season_str} Audio\Amazon_temp"
+    output_root_path = fr"C:\C_Video_Python\The Mentalist\The Mentalist Season {season_str}\Season {season_str} Audio"
+    exclude_folder = ['Amazon_temp']
+    
+    # lang_dict_upper is used inside map_filename_to_lang
+    lang_dict_upper = make_lang_start_dict()
+    # map_filename_to_lang_step2 = partial(map_filename_to_lang, mapping_dict=lang_dict_upper)
+
+    # move_file_df is for debugging to see which files will go to which folder
+    move_file_df = ost.make_move_file_bulk_df(
+        input_root_path = input_root_path
+        ,output_root_path = output_root_path
+        ,map_filename_func = map_filename_to_lang
+        ,mapping_dict = lang_dict_upper
+        ,exclude_folder = exclude_folder
+    )
+    ost.move_file_bulk(
+        input_root_path = input_root_path
+        ,output_root_path = output_root_path
+        ,map_filename_func = map_filename_to_lang
+        ,mapping_dict = lang_dict_upper
+        ,exclude_folder = exclude_folder
+    )
+
+test_map_filename_to_lang()
+# main_orginizer()
+# test_make_language_dict()
+# test_map_filename_to_lang()
+    
+
+
+
+
+

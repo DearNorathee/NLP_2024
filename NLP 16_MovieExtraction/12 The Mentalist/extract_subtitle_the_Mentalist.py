@@ -72,7 +72,7 @@ vt.create_series_working_folder(
 #%%
 # clean up file name
 ost.auto_rename_series(
-    folder_path = r"D:\D_Videos\Series\The Mentalist\S07", 
+    folder_path = r"D:\D_Videos\Series\The Mentalist\S01", 
     prefix = "The Mentalist_")
 #%%
 input_video_folders: Dict[int, Union[str,Path]] = {}
@@ -91,9 +91,17 @@ input_video_folder = fr"D:\D_Videos\Series\The Mentalist"
 
 folder_names_str = ost.get_folders_name(input_video_folder)
 avaliable_seasons = pst.get_num(folder_names_str)
+# avaliable_seasons = [6,7]
 
+# folder_path should be dict to
 folder_paths = ost.get_folders_path(input_video_folder)
 
+
+for i, season in enumerate(avaliable_seasons):
+    print(f'Done season {season} ')
+    
+    
+    
 # took about 40 sec per video
 #  so about 20 min per season
 for i, season in enumerate(avaliable_seasons):
@@ -101,7 +109,7 @@ for i, season in enumerate(avaliable_seasons):
     input_video_folders[season] = folder_paths[i]
 
 
-for season in [1]:
+for season in [6,7]:
     try:
         vt.extract_subtitle(filepaths = input_video_folders[season], output_folder = output_sub_folders[season])
         print(f'Done season {season} ✅')

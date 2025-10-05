@@ -55,7 +55,7 @@ for i, season in enumerate(avaliable_seasons):
 
 #%%
 # !CHANGE
-for season in [1]:
+for season in [6,7]:
     try:
         vt.extract_audio(filepaths = input_video_folders[season], output_folder = output_audio_folders[season])
         print(f'\nDone season {season} ✅')
