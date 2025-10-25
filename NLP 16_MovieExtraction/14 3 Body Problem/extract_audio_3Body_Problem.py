@@ -43,8 +43,7 @@ avaliable_seasons = pst.get_num(folder_names_str)
 folder_paths = ost.get_folders_path(input_video_folder)
 folder_paths.pop(-1) # exclude S01_Experiment(keep)
 
-# took about 3 min per video
-# about 1 hr per season
+# took about 15 min per episode(mp3)
 for i, season in enumerate(avaliable_seasons):
     season_str = str(season).zfill(2)
     input_video_folders[season] = folder_paths[i]
