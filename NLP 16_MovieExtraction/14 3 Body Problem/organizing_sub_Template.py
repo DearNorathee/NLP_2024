@@ -12,7 +12,7 @@ Created on Fri Oct  3 11:47:38 2025
 # generalize to use this in other series, (move_file_bulk)
 
 # seperate template_dict(original template dict for mapping langauge_code: langauge_name) this will speed things up quite a bit
-# 
+
 
 import video_toolkit as vt
 import os_toolkit as ost
@@ -38,37 +38,47 @@ def map_filename_to_lang(path: str|Path, mapping_dict: dict[str, str]) -> str:
 
 def make_lang_start_dict():
     # seperate dict creation from mapping to langauge folder to speed things up quite significantly
-    lang_dict_lower = vt.make_all_language_dict(key_as="alpha2",value_as="name")  
-    lang_dict_upper = dict()
-    for key, value in lang_dict_lower.items():
-        lang_dict_upper[key.upper()] = value
-    lang_dict_upper['PT'] = 'Portuguese_Brazil'
-    lang_dict_upper['ES'] = 'Spanish (Latin America)'
-    return lang_dict_upper
+    # lang_dict_lower = vt.make_all_language_dict(key_as="alpha3",value_as="name")  
+
+    lang_dict_lower = {"eng": "English Amazon", 
+    "spa": "Spanish (Spain) Amazon", 
+    "fra": "French CC Amazon", 
+    "ita": "Italian Amazon", 
+    "tur": "Turkish Amazon", 
+    "por": "Portuguese Amazon", 
+    "deu": "German Amazon", 
+    "heb": "Hebrew Amazon", 
+    "vie": "Vietnamese Amazon", 
+    "nld": "Dutch Amazon", 
+    "msa": "Malay Amazon", 
+    "ind": "Indonesian Amazon",
+    "fil": "Filipino Amazon"
+    }
+
+    return lang_dict_lower
 
 def test_map_filename_to_lang():
     """
     Test the map_filename_to_lang function.
     """
-    path01 = r"C:\C_Video_Python\The Mentalist\The Mentalist Season 07\Season 07 Subtitle\Amazon_temp\The Mentalist_S07E01_1_kor.srt"
+    path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 12\Season 12 Subtitle\Amazon_temp\The Big Bang Theory_S12E01_1_heb.srt"
     mapping_dict = make_lang_start_dict()
     actual01 = map_filename_to_lang(path01, mapping_dict)
+    expect01 = 'Hebrew Amazon'
     print(actual01)
+    assert actual01 == expect01
 
-# move_media_file_bulk
-def main_orginizer():
-    
-    from pandarallel import pandarallel
-    import shutil
-    from tqdm.auto import tqdm
-    from functools import partial
+def move_file_1season(
+        season:int
+        ,input_root_template
+        ,output_root_template
+        ):
 
-    # pandarallel.initialize(progress_bar=True)
-    season:int = 6
     season_str = str(season).zfill(2)
-
-    input_root_path = fr"C:\C_Video_Python\The Mentalist\The Mentalist Season {season_str}\Season {season_str} Audio\Amazon_temp"
-    output_root_path = fr"C:\C_Video_Python\The Mentalist\The Mentalist Season {season_str}\Season {season_str} Audio"
+    
+    input_root_path = pst.TString(input_root_template).fill_values(season_str)
+    output_root_path = pst.TString(output_root_template).fill_values(season_str)
+    
     exclude_folder = ['Amazon_temp']
     
     # lang_dict_upper is used inside map_filename_to_lang
@@ -89,10 +99,34 @@ def main_orginizer():
         ,map_filename_func = map_filename_to_lang
         ,mapping_dict = lang_dict_upper
         ,exclude_folder = exclude_folder
+        ,progress_bar=False
+        
     )
 
+# move_media_file_bulk
+def main_orginizer():
+    
+    from pandarallel import pandarallel
+    import shutil
+    from tqdm import tqdm
+    from functools import partial
+
+    loop_season = tqdm(range(1,13), colour = '#9c5700',position=0)
+    
+    input_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Subtitle\Amazon_temp"
+    output_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Subtitle"
+
+
+    for season in loop_season:
+        loop_season.set_description(f"Processing season {season}")
+        move_file_1season(season, input_root_template, output_root_template,)
+        # try:
+        #     move_file_1season(season)
+        # except:
+        #     print(f"There's an error in season: {season}. Please check.❌")
+
 main_orginizer()
-# test_map_filename_to_lang()
+test_map_filename_to_lang()
 # main_orginizer()
 # test_make_language_dict()
 # test_map_filename_to_lang()
