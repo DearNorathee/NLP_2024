@@ -94,11 +94,11 @@ vt.extract_subtitle(filepaths = video_input_dict[2], output_folder = out_sub_pat
 print('Extract subtitle all season done:>')
 
 
-sub_path01 = r"D:\D_Videos\Series\The 100_DE\S03\The 100 S03E03_DE.srt"
-sub_df_01 = vt.sub_to_df(sub_path01)
+vt.extract_subtitle(filepaths = r"D:\D_Videos\Series\The 100\The 100_DE\S06"
+                    , output_folder = r"C:\C_Video_Python\The 100\The 100 Season 06\Season 06 Subtitle\German Amazon Auto")
 
-sub_path02 = r"D:\D_Videos\Series\The 100_DE\The_100 - season 3.en\The 100 - 3x03 - Ye Who Enter Here.720p HDTV.AVS.en.srt"
-sub_df_02 = vt.sub_to_df(sub_path02)
 
+vt.extract_subtitle(filepaths = r"D:\D_Videos\Series\The 100\The 100_DE\S07"
+                    , output_folder = r"C:\C_Video_Python\The 100\The 100 Season 07\Season 07 Subtitle\German Amazon Auto")
 
 

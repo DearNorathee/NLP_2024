@@ -38,25 +38,21 @@ def map_filename_to_lang(path: str|Path, mapping_dict: dict[str, str]) -> str:
 
 def make_lang_start_dict():
     # seperate dict creation from mapping to langauge folder to speed things up quite significantly
-    # lang_dict_lower = vt.make_all_language_dict(key_as="alpha3",value_as="name")  
+    lang_dict_lower = vt.make_all_language_dict(key_as="alpha2",value_as="name")  
     lang_dict_upper = dict()
-    # for key, value in lang_dict_lower.items():
-    #     lang_dict_upper[key.upper()] = value
+    for key, value in lang_dict_lower.items():
+        lang_dict_upper[key.upper()] = value
+        
+    lang_dict_upper['PT'] = 'Portuguese_Brazil'
+    lang_dict_upper['ES'] = 'Spanish_Latin America'
 
-    lang_dict_upper['DE'] = 'German Amazon'
-    lang_dict_upper['ES'] = 'Spanish (Latin America) Amazon'
-    lang_dict_upper['EN'] = 'English Amazon'
-    lang_dict_upper['FR'] = 'French Amazon'
-    lang_dict_upper['IT'] = 'Italian Amazon'
-    lang_dict_upper['PT'] = 'Portuguese Amazon'
-    lang_dict_upper['TR'] = 'Turkish Amazon'
     return lang_dict_upper
 
 def test_map_filename_to_lang():
     """
     Test the map_filename_to_lang function.
     """
-    path01 = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season 01\Season 01 Audio\Amazon_temp\The Big Bang Theory_S01E01_0_DE.mp3"
+    path01 = r"C:\C_Video_Python\3 Body Problem\3 Body Problem Season 01\Season 01 Audio\All_temp\3 Body Problem_S01E01_0_CS.mp3"
     mapping_dict = make_lang_start_dict()
     actual01 = map_filename_to_lang(path01, mapping_dict)
     print(actual01)
@@ -65,6 +61,7 @@ def move_file_1season(
         season:int
         ,input_root_template
         ,output_root_template
+        ,exclude_folder:list[str]
         ):
 
     season_str = str(season).zfill(2)
@@ -72,7 +69,7 @@ def move_file_1season(
     input_root_path = pst.TString(input_root_template).fill_values(season_str)
     output_root_path = pst.TString(output_root_template).fill_values(season_str)
     
-    exclude_folder = ['Amazon_temp']
+    
     
     # lang_dict_upper is used inside map_filename_to_lang
     lang_dict_upper = make_lang_start_dict()
@@ -103,15 +100,15 @@ def main_orginizer():
     from tqdm.auto import tqdm
     from functools import partial
 
-    loop_season = tqdm(range(1,13), colour = '#1b487b')
+    loop_season = tqdm(range(1,2), colour = '#1b487b')
     
-    input_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Audio\Amazon_temp"
-    output_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Audio"
-
-
+    input_root_template = r"C:\C_Video_Python\3 Body Problem\3 Body Problem Season {}\Season {} Audio\All_temp"
+    output_root_template = r"C:\C_Video_Python\3 Body Problem\3 Body Problem Season {}\Season {} Audio"
+    exclude_folder = ['All_temp']
+    
     for season in loop_season:
         loop_season.set_description(f"Processing season {season}")
-        move_file_1season(season, input_root_template, output_root_template)
+        move_file_1season(season, input_root_template, output_root_template,exclude_folder)
         # try:
         #     move_file_1season(season)
         # except:
@@ -121,7 +118,7 @@ def main_orginizer():
 main_orginizer()
 # main_orginizer()
 # test_make_language_dict()
-# test_map_filename_to_lang()
+test_map_filename_to_lang()
     
 
 

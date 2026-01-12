@@ -38,18 +38,18 @@ def map_filename_to_lang(path: str|Path, mapping_dict: dict[str, str]) -> str:
 
 def make_lang_start_dict():
     # seperate dict creation from mapping to langauge folder to speed things up quite significantly
-    # lang_dict_lower = vt.make_all_language_dict(key_as="alpha3",value_as="name")  
+    lang_dict_lower = vt.make_all_language_dict(key_as="alpha3",value_as="name")  
     lang_dict_upper = dict()
-    # for key, value in lang_dict_lower.items():
-    #     lang_dict_upper[key.upper()] = value
+    for key, value in lang_dict_lower.items():
+        lang_dict_upper[key.upper()] = value
 
-    lang_dict_upper['DE'] = 'German Amazon'
-    lang_dict_upper['ES'] = 'Spanish (Latin America) Amazon'
-    lang_dict_upper['EN'] = 'English Amazon'
-    lang_dict_upper['FR'] = 'French Amazon'
-    lang_dict_upper['IT'] = 'Italian Amazon'
-    lang_dict_upper['PT'] = 'Portuguese Amazon'
-    lang_dict_upper['TR'] = 'Turkish Amazon'
+    # lang_dict_upper['DE'] = 'German Amazon'
+    # lang_dict_upper['ES'] = 'Spanish (Latin America) Amazon'
+    # lang_dict_upper['EN'] = 'English Amazon'
+    # lang_dict_upper['FR'] = 'French Amazon'
+    # lang_dict_upper['IT'] = 'Italian Amazon'
+    # lang_dict_upper['PT'] = 'Portuguese Amazon'
+    # lang_dict_upper['TR'] = 'Turkish Amazon'
     return lang_dict_upper
 
 def test_map_filename_to_lang():

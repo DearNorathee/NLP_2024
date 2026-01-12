@@ -111,10 +111,10 @@ def main_orginizer():
     from tqdm import tqdm
     from functools import partial
 
-    loop_season = tqdm(range(1,13), colour = '#9c5700',position=0)
+    loop_season = tqdm(range(3,4), colour = '#9c5700',position=0)
     
-    input_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Subtitle\Amazon_temp"
-    output_root_template = r"C:\C_Video_Python\The Big Bang Theory\BigBang Theory Season {}\Season {} Subtitle"
+    input_root_template = r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season {}\Season {} Subtitle\Amazon_temp"
+    output_root_template = r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season {}\Season {} Subtitle"
 
 
     for season in loop_season:

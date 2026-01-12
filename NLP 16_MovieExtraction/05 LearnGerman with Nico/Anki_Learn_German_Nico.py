@@ -8,6 +8,7 @@ Created on Sun Mar  9 10:15:16 2025
 import pandas as pd
 import dataframe_short as ds
 import math
+import os_toolkit as ost
 
 excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\German\Learn German with Nico_A1_Reading.xlsx"
 
@@ -28,4 +29,6 @@ for i in range(len(df_list)):
     output_name = f"GermanNico_A1_{100*(i+1)}.csv"
     output_path = out_csv_folder + "/" + output_name
     df_list[i].to_csv(output_path, index = False, encoding="utf-8-sig")
+
+
 

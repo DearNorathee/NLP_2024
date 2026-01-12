@@ -31,6 +31,10 @@ model = whisper.load_model('base')
 
 input_video_path = r"G:\My Drive\G_Videos\Portuguese\The 100 PT\The 100 Season 01 Portuguese"
 
+vt.audio_to_sub(model = model
+                , audio_paths = r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Audio\English Amazon\The Big Bang Theory_S06E01_1_EN.mp3"
+                ,output_folder=r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Audio\English Amazon"
+                )
 
 
 audio_PT_path = r"C:\C_Video_Python\Portuguese\The 100\Audio Extracted\The 100 season 1\Portuguese mp3"
