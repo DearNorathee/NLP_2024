@@ -14,7 +14,7 @@ from play_audio_file import play_alarm_done, play_alarm_error
 import py_string_tool as pst
 import pandas as pd
 
-episode = "S06E07"
+episode = "S06E11"
 
 sub_01_path = fr"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Subtitle\Portuguese Amazon\The Big Bang Theory_{episode}_4_por.srt"
 sub_02_path = fr"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Subtitle\English Amazon\The Big Bang Theory_{episode}_15_eng.srt"
