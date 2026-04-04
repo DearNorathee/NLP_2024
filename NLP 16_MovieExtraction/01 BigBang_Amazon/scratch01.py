@@ -1,19 +1,15 @@
-from tqdm import tqdm
-import time
-outer_count = 10
-inner_count = 5
-# for i in tqdm(range(outer_count), desc="Outer", position=0, colour = 'blue'):
-#     for j in tqdm(range(inner_count), desc="Inner", position=1, leave=False, colour = 'green'):
-#         # your code
-#         time.sleep(0.5)
+import os_toolkit as ost
+from pathlib import Path
+import video_toolkit as vt
 
-def outer_tqdm():
-    for i in tqdm(range(outer_count), desc="Outer", colour = '#1b487b'):
-        inner_tqdm()
+root_path_02 = Path(r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Subtitle")
 
-def inner_tqdm():
-    for j in tqdm(range(inner_count), desc="Inner", leave=False, colour = 'blue'):
-        # your code
-        time.sleep(0.1)
+file_path_FRA = root_path_02 / "French CC Amazon"
+move_path_FRA = [root_path_02 / 'French CC Amazon',root_path_02 / 'French Amazon']
 
-outer_tqdm()
+df_move_02_FRA = ost.move_repeated_lang_media(file_path_FRA,move_path_FRA)
+
+sub_en = None
+sub_fr = r"C:\C_Video_Python\The Big Bang Theory\The Big Bang Theory Season 06\Season 06 Subtitle\French CC Amazon\The Big Bang Theory_S06E01_8_fra.srt"
+
+df_sub_fr = vt.sub_to_df(sub_fr)

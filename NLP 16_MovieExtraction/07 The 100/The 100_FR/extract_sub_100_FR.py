@@ -31,8 +31,6 @@ for season in range(1,8):
     new_folder.mkdir(parents=True, exist_ok=True)
     
     
-
-
 folder_names_str = ost.get_folders_name(input_video_folder)
 avaliable_seasons = pst.get_num(folder_names_str)
 
@@ -44,7 +42,7 @@ for i, season in enumerate(avaliable_seasons):
     input_video_folders[season] = folder_paths[i]
 
 
-for season in range(3,13):
+for season in range(1,8):
     try:
         vt.extract_subtitle(filepaths = input_video_folders[season], output_folder = output_sub_folders[season])
         print(f'Done season {season} ✅')
