@@ -10,6 +10,7 @@ import dataframe_short as ds
 import math
 import os_toolkit as ost
 
+
 excel_path = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\German\Learn German with Nico_A1_Reading.xlsx"
 
 out_csv_folder = r"C:\Users\Heng2020\OneDrive\D_Documents\_Learn Languages\German\Nicos Anki"
